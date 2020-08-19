@@ -1,0 +1,536 @@
+Unknown command: '0.0.0.0:8000'
+Type 'manage.py help' for usage.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+/data/devops/svn/views.py changed, reloading.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+August 03, 2020 - 01:40:52
+Django version 2.2.12, using settings 'devops.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+Watching for file changes with StatReloader
+Not Found: /svn/ branchAdjust
+[03/Aug/2020 01:43:54] "POST /svn/%20branchAdjust?%20branch=20200730&addedSystems=oms,%20stms&deletedSystems=lcms&commnet=no%20james HTTP/1.1" 404 2631
+/data/devops/svn/urls.py changed, reloading.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+August 03, 2020 - 01:41:09
+Django version 2.2.12, using settings 'devops.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+Watching for file changes with StatReloader
+Not Found: /svn/ branchAdjust
+[03/Aug/2020 01:45:20] "POST /svn/%20branchAdjust?%20branch=20200730&addedSystems=oms,%20stms&deletedSystems=lcms&commnet=no%20james HTTP/1.1" 404 2816
+Watching for file changes with StatReloader
+Internal Server Error: /svn/branchAdjust
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.6/site-packages/django/core/handlers/exception.py", line 34, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.6/site-packages/django/utils/deprecation.py", line 93, in __call__
+    response = self.process_request(request)
+  File "/usr/local/lib/python3.6/site-packages/django/middleware/common.py", line 53, in process_request
+    path = self.get_full_path_with_slash(request)
+  File "/usr/local/lib/python3.6/site-packages/django/middleware/common.py", line 93, in get_full_path_with_slash
+    'url': request.get_host() + new_path,
+RuntimeError: You called this URL via POST, but the URL doesn't end in a slash and you have APPEND_SLASH set. Django can't redirect to the slash URL while maintaining POST data. Change your form to point to 58.210.99.210:8010/svn/branchAdjust/ (note the trailing slash), or set APPEND_SLASH=False in your Django settings.
+[03/Aug/2020 01:50:31] "POST /svn/branchAdjust HTTP/1.1" 500 60909
+[03/Aug/2020 01:51:03] "POST /svn/branchAdjust/ HTTP/1.1" 200 84
+/data/devops/svn/views.py changed, reloading.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+August 03, 2020 - 01:45:14
+Django version 2.2.12, using settings 'devops.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+{"errcode":310000,"errmsg":"keywords not in content, more: [https://ding-doc.dingtalk.com/doc#/serverapi2/qf2nxq]"}
+/data/devops/svn/views.py changed, reloading.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+August 03, 2020 - 01:48:38
+Django version 2.2.12, using settings 'devops.settings'
+Starting development server at http://0.0.0.0:8888/
+Quit the server with CONTROL-C.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+[03/Aug/2020 01:52:59] "POST /svn/branchAdjust/ HTTP/1.1" 200 87
+/data/devops/svn/views.py changed, reloading.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+August 03, 2020 - 01:52:54
+Django version 2.2.12, using settings 'devops.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+{"errcode":0,"errmsg":"ok"}
+/data/devops/svn/views.py changed, reloading.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+August 03, 2020 - 01:52:55
+Django version 2.2.12, using settings 'devops.settings'
+Starting development server at http://0.0.0.0:8888/
+Quit the server with CONTROL-C.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+[03/Aug/2020 01:53:41] "POST /svn/branchAdjust/ HTTP/1.1" 200 91
+[03/Aug/2020 01:55:32] "GET /svn/branchAdjust/ HTTP/1.1" 200 29
+Internal Server Error: /svn/branchAdjust/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.6/site-packages/django/core/handlers/exception.py", line 34, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.6/site-packages/django/core/handlers/base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/usr/local/lib/python3.6/site-packages/django/core/handlers/base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.6/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/data/devops/svn/views.py", line 109, in branchAdjust
+    "commnet: " + comment
+TypeError: must be str, not NoneType
+[03/Aug/2020 01:59:22] "POST /svn/branchAdjust/ HTTP/1.1" 500 66057
+[03/Aug/2020 02:04:54] "GET /svn/branchAdjust/ HTTP/1.1" 200 29
+[03/Aug/2020 02:05:06] "POST /svn/branchCreate/ HTTP/1.1" 200 2
+----------------------------------------
+Exception happened during processing of request from ('58.210.99.210', 56950)
+Traceback (most recent call last):
+  File "/usr/lib64/python3.6/socketserver.py", line 654, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib64/python3.6/socketserver.py", line 364, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib64/python3.6/socketserver.py", line 724, in __init__
+    self.handle()
+  File "/usr/local/lib/python3.6/site-packages/django/core/servers/basehttp.py", line 171, in handle
+    self.handle_one_request()
+  File "/usr/local/lib/python3.6/site-packages/django/core/servers/basehttp.py", line 179, in handle_one_request
+    self.raw_requestline = self.rfile.readline(65537)
+  File "/usr/lib64/python3.6/socket.py", line 586, in readinto
+    return self._sock.recv_into(b)
+ConnectionResetError: [Errno 104] Connection reset by peer
+----------------------------------------
+Internal Server Error: /svn/branchAdjust/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.6/site-packages/django/core/handlers/exception.py", line 34, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.6/site-packages/django/core/handlers/base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/usr/local/lib/python3.6/site-packages/django/core/handlers/base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.6/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/data/devops/svn/views.py", line 109, in branchAdjust
+    "commnet: " + comment
+TypeError: must be str, not NoneType
+[03/Aug/2020 02:15:09] "POST /svn/branchAdjust/ HTTP/1.1" 500 65961
+[03/Aug/2020 02:16:07] "POST /svn/branchCreate/ HTTP/1.1" 200 2
+[03/Aug/2020 02:16:18] "GET /svn/branchAdjust/ HTTP/1.1" 200 29
+Not Found: /favicon.ico
+[03/Aug/2020 02:16:18] "GET /favicon.ico HTTP/1.1" 404 2080
+[03/Aug/2020 03:18:02] "POST /svn/branchAdjust/ HTTP/1.1" 200 91
+/data/devops/svn/views.py changed, reloading.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+August 03, 2020 - 01:53:40
+Django version 2.2.12, using settings 'devops.settings'
+Starting development server at http://0.0.0.0:8888/
+Quit the server with CONTROL-C.
+/data/devops/svn/views.py changed, reloading.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+August 03, 2020 - 01:53:39
+Django version 2.2.12, using settings 'devops.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+{"errcode":0,"errmsg":"ok"}
+bash /data/script/branchCreate.sh 2020 08 04 wxms Java
+{"errcode":0,"errmsg":"ok"}
+bash /data/script/branchCreate.sh 2020 08 03 lingshou Web
+{"errcode":0,"errmsg":"ok"}
+{"errcode":0,"errmsg":"ok"}
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Internal Server Error: /svn/branchAdjust/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.6/site-packages/django/core/handlers/exception.py", line 34, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.6/site-packages/django/core/handlers/base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/usr/local/lib/python3.6/site-packages/django/core/handlers/base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.6/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/data/devops/svn/views.py", line 148, in branchAdjust
+    "comment: " + comment
+TypeError: must be str, not NoneType
+[03/Aug/2020 03:21:29] "POST /svn/branchAdjust/ HTTP/1.1" 500 65961
+Internal Server Error: /svn/branchAdjust/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.6/site-packages/django/core/handlers/exception.py", line 34, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.6/site-packages/django/core/handlers/base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/usr/local/lib/python3.6/site-packages/django/core/handlers/base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.6/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/data/devops/svn/views.py", line 148, in branchAdjust
+    "comment: " + comment
+TypeError: must be str, not NoneType
+[03/Aug/2020 03:23:21] "POST /svn/branchAdjust/ HTTP/1.1" 500 65964
+----------------------------------------
+Exception happened during processing of request from ('58.210.99.210', 60925)
+Traceback (most recent call last):
+  File "/usr/lib64/python3.6/socketserver.py", line 654, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib64/python3.6/socketserver.py", line 364, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib64/python3.6/socketserver.py", line 724, in __init__
+    self.handle()
+  File "/usr/local/lib/python3.6/site-packages/django/core/servers/basehttp.py", line 171, in handle
+    self.handle_one_request()
+  File "/usr/local/lib/python3.6/site-packages/django/core/servers/basehttp.py", line 179, in handle_one_request
+    self.raw_requestline = self.rfile.readline(65537)
+  File "/usr/lib64/python3.6/socket.py", line 586, in readinto
+    return self._sock.recv_into(b)
+ConnectionResetError: [Errno 104] Connection reset by peer
+----------------------------------------
+----------------------------------------
+Exception happened during processing of request from ('58.210.99.210', 61018)
+Traceback (most recent call last):
+  File "/usr/lib64/python3.6/socketserver.py", line 654, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib64/python3.6/socketserver.py", line 364, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib64/python3.6/socketserver.py", line 724, in __init__
+    self.handle()
+  File "/usr/local/lib/python3.6/site-packages/django/core/servers/basehttp.py", line 171, in handle
+    self.handle_one_request()
+  File "/usr/local/lib/python3.6/site-packages/django/core/servers/basehttp.py", line 179, in handle_one_request
+    self.raw_requestline = self.rfile.readline(65537)
+  File "/usr/lib64/python3.6/socket.py", line 586, in readinto
+    return self._sock.recv_into(b)
+ConnectionResetError: [Errno 104] Connection reset by peer
+----------------------------------------
+[03/Aug/2020 03:29:53] "POST /svn/branchAdjust/ HTTP/1.1" 200 94
+[03/Aug/2020 03:41:44] "POST /svn/branchCreate/ HTTP/1.1" 200 0
+[03/Aug/2020 03:46:08] "POST /svn/branchCreate/ HTTP/1.1" 200 0
+[03/Aug/2020 03:46:59] "POST /svn/branchAdjust/ HTTP/1.1" 200 91
+/data/devops/svn/views.py changed, reloading.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+August 03, 2020 - 03:19:22
+Django version 2.2.12, using settings 'devops.settings'
+Starting development server at http://0.0.0.0:8888/
+Quit the server with CONTROL-C.
+/data/devops/svn/views.py changed, reloading.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+August 03, 2020 - 03:19:22
+Django version 2.2.12, using settings 'devops.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+{"errcode":0,"errmsg":"ok"}
+bash /data/script/branchCreate.sh 2020 09 29 oms Java
+{"errcode":0,"errmsg":"ok"}
+bash /data/script/branchCreate.sh 2020 09 29 stms Java
+{"errcode":0,"errmsg":"ok"}
+bash /data/script/branchCreate.sh 2020 09 29 dwms Java
+{"errcode":0,"errmsg":"ok"}
+bash /data/script/branchCreate.sh 2020 09 29 pays Java
+{"errcode":0,"errmsg":"ok"}
+{"errcode":0,"errmsg":"ok"}
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Forbidden (CSRF cookie not set.): /svn/branchAdjust/
+[03/Aug/2020 03:48:23] "POST /svn/branchAdjust/ HTTP/1.1" 403 2868
+Forbidden (CSRF cookie not set.): /svn/branchAdjust/
+[03/Aug/2020 03:48:33] "POST /svn/branchAdjust/ HTTP/1.1" 403 2868
+/data/devops/svn/views.py changed, reloading.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+August 03, 2020 - 03:47:31
+Django version 2.2.12, using settings 'devops.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+/data/devops/svn/views.py changed, reloading.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+August 03, 2020 - 03:47:30
+Django version 2.2.12, using settings 'devops.settings'
+Starting development server at http://0.0.0.0:8888/
+Quit the server with CONTROL-C.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Internal Server Error: /svn/branchAdjust/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.6/site-packages/django/core/handlers/exception.py", line 34, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.6/site-packages/django/core/handlers/base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/usr/local/lib/python3.6/site-packages/django/core/handlers/base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.6/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/data/devops/svn/views.py", line 124, in branchAdjust
+    year, month, date, project, comment)
+TypeError: not all arguments converted during string formatting
+[03/Aug/2020 03:49:05] "POST /svn/branchAdjust/ HTTP/1.1" 500 68502
+Internal Server Error: /svn/branchAdjust/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.6/site-packages/django/core/handlers/exception.py", line 34, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.6/site-packages/django/core/handlers/base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/usr/local/lib/python3.6/site-packages/django/core/handlers/base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.6/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/data/devops/svn/views.py", line 124, in branchAdjust
+    year, month, date, project, comment)
+TypeError: not all arguments converted during string formatting
+[03/Aug/2020 03:53:06] "POST /svn/branchAdjust/ HTTP/1.1" 500 68502
+Internal Server Error: /svn/branchAdjust/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.6/site-packages/django/core/handlers/exception.py", line 34, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.6/site-packages/django/core/handlers/base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/usr/local/lib/python3.6/site-packages/django/core/handlers/base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.6/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/data/devops/svn/views.py", line 124, in branchAdjust
+    year, month, date, project, comment)
+TypeError: not all arguments converted during string formatting
+[03/Aug/2020 03:55:29] "POST /svn/branchAdjust/ HTTP/1.1" 500 68502
+/data/devops/svn/views.py changed, reloading.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+August 03, 2020 - 03:48:52
+Django version 2.2.12, using settings 'devops.settings'
+Starting development server at http://0.0.0.0:8888/
+Quit the server with CONTROL-C.
+/data/devops/svn/views.py changed, reloading.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+August 03, 2020 - 03:48:52
+Django version 2.2.12, using settings 'devops.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+bash /data/script/branchCreate.sh 2020 09 29 urms Java
+{"errcode":0,"errmsg":"ok"}
+bash /data/script/branchCreate.sh 2020 09 29 acts Java
+{"errcode":0,"errmsg":"ok"}
+bash /data/script/branchCreate.sh 2020 09 29 urms Java
+{"errcode":0,"errmsg":"ok"}
+bash /data/script/branchCreate.sh 2020 09 29 acts Java
+{"errcode":0,"errmsg":"ok"}
+bash /data/script/branchCreate.sh 2020 09 29 urms Java
+{"errcode":0,"errmsg":"ok"}
+bash /data/script/branchCreate.sh 2020 09 29 acts Java
+{"errcode":0,"errmsg":"ok"}
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Internal Server Error: /svn/branchAdjust/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.6/site-packages/django/core/handlers/exception.py", line 34, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.6/site-packages/django/core/handlers/base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/usr/local/lib/python3.6/site-packages/django/core/handlers/base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.6/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/data/devops/svn/views.py", line 124, in branchAdjust
+    year, month, date, project, comment)
+UnboundLocalError: local variable 'project' referenced before assignment
+[03/Aug/2020 03:55:53] "POST /svn/branchAdjust/ HTTP/1.1" 500 67614
+/data/devops/svn/views.py changed, reloading.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+August 03, 2020 - 03:55:38
+Django version 2.2.12, using settings 'devops.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+/data/devops/svn/views.py changed, reloading.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+August 03, 2020 - 03:55:37
+Django version 2.2.12, using settings 'devops.settings'
+Starting development server at http://0.0.0.0:8888/
+Quit the server with CONTROL-C.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+[03/Aug/2020 03:57:43] "POST /svn/branchAdjust/ HTTP/1.1" 200 36
+/data/devops/svn/views.py changed, reloading.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+August 03, 2020 - 03:57:37
+Django version 2.2.12, using settings 'devops.settings'
+Starting development server at http://0.0.0.0:8888/
+Quit the server with CONTROL-C.
+/data/devops/svn/views.py changed, reloading.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+August 03, 2020 - 03:57:36
+Django version 2.2.12, using settings 'devops.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+bash /data/script/branchDel.sh 2020 09 29 stms no -james
+{"errcode":310000,"errmsg":"keywords not in content, more: [https://ding-doc.dingtalk.com/doc#/serverapi2/qf2nxq]"}
+bash /data/script/branchDel.sh 2020 09 29 pays no -james
+{"errcode":310000,"errmsg":"keywords not in content, more: [https://ding-doc.dingtalk.com/doc#/serverapi2/qf2nxq]"}
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+/data/devops/svn/views.py changed, reloading.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+August 03, 2020 - 03:58:05
+Django version 2.2.12, using settings 'devops.settings'
+Starting development server at http://0.0.0.0:8888/
+Quit the server with CONTROL-C.
+/data/devops/svn/views.py changed, reloading.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+August 03, 2020 - 03:58:06
+Django version 2.2.12, using settings 'devops.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+[03/Aug/2020 05:56:52] "POST /svn/branchAdjust/ HTTP/1.1" 200 39
+[03/Aug/2020 06:00:55] "POST /svn/branchAdjust/ HTTP/1.1" 200 39
+[03/Aug/2020 06:01:27] "POST /svn/branchAdjust/ HTTP/1.1" 200 39
+[03/Aug/2020 06:02:17] "POST /svn/branchAdjust/ HTTP/1.1" 200 39
+/data/devops/svn/views.py changed, reloading.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+August 03, 2020 - 05:46:16
+Django version 2.2.12, using settings 'devops.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+bash /data/script/branchDel.sh 2020 09 29 stms no -james
+bash /data/script/branchDel.sh 2020 09 29 pays no -james
+bash /data/script/branchDel.sh 2020 09 29 oms no -james
+bash /data/script/branchDel.sh 2020 09 29 urms no -james
+bash /data/script/branchDel.sh 2020 09 29 oms no -james
+bash /data/script/branchDel.sh 2020 09 29 urms no -james
+bash /data/script/branchDel.sh 2020 09 29 oms no -james
+bash /data/script/branchDel.sh 2020 09 29 urms no -james
+/data/devops/svn/views.py changed, reloading.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+August 03, 2020 - 05:46:15
+Django version 2.2.12, using settings 'devops.settings'
+Starting development server at http://0.0.0.0:8888/
+Quit the server with CONTROL-C.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+[03/Aug/2020 06:04:19] "POST /svn/branchAdjust/ HTTP/1.1" 200 39
+[03/Aug/2020 06:05:58] "POST /svn/branchAdjust/ HTTP/1.1" 200 39
+[03/Aug/2020 06:06:50] "POST /svn/branchAdjust/ HTTP/1.1" 200 83
+[03/Aug/2020 06:08:17] "POST /svn/branchCreate/ HTTP/1.1" 200 0
+[03/Aug/2020 06:11:49] "POST /svn/branchAdjust/ HTTP/1.1" 200 39
+/data/devops/svn/views.py changed, reloading.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+August 03, 2020 - 06:03:47
+Django version 2.2.12, using settings 'devops.settings'
+Starting development server at http://0.0.0.0:8888/
+Quit the server with CONTROL-C.
+/data/devops/svn/views.py changed, reloading.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+August 03, 2020 - 06:03:47
+Django version 2.2.12, using settings 'devops.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+bash /data/script/branchCreate.sh 2020 09 29 basic Java
+{"errcode":0,"errmsg":"ok"}
+bash /data/script/branchCreate.sh 2020 09 29 salems Java
+{"errcode":0,"errmsg":"ok"}
+bash /data/script/branchDel.sh 2020 09 29 acts no -james
+bash /data/script/branchCreate.sh 2020 09 29 stms Java
+{"errcode":0,"errmsg":"ok"}
+bash /data/script/branchDel.sh 2020 09 29 basic no -james
+bash /data/script/branchDel.sh 2020 09 29 dwms no -james
+bash /data/script/branchCreate.sh 2020 09 29 oms Java
+{"errcode":0,"errmsg":"ok"}
+bash /data/script/branchCreate.sh 2020 09 30 dwms Java
+{"errcode":0,"errmsg":"ok"}
+bash /data/script/branchCreate.sh 2020 09 30 pays Java
+{"errcode":0,"errmsg":"ok"}
+bash /data/script/branchCreate.sh 2020 09 30 oms Java
+{"errcode":0,"errmsg":"ok"}
+bash /data/script/branchDel.sh 2020 09 30 pays no -james
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+[03/Aug/2020 06:29:45] "POST /svn/branchAdjust/ HTTP/1.1" 200 38
+/data/devops/svn/views.py changed, reloading.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+August 03, 2020 - 06:29:15
+Django version 2.2.12, using settings 'devops.settings'
+Starting development server at http://0.0.0.0:8888/
+Quit the server with CONTROL-C.
+/data/devops/svn/views.py changed, reloading.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+August 03, 2020 - 06:29:15
+Django version 2.2.12, using settings 'devops.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+bash /data/script/branchCreate.sh 2020 09 30 basic Java
+{"errcode":0,"errmsg":"ok"}
+bash /data/script/branchDel.sh 2020 09 30 oms no -james
+{"errcode":0,"errmsg":"ok"}
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+[03/Aug/2020 06:34:42] "POST /svn/branchAdjust/ HTTP/1.1" 200 45
+/data/devops/svn/views.py changed, reloading.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+August 03, 2020 - 06:34:36
+Django version 2.2.12, using settings 'devops.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+bash /data/script/branchCreate.sh 2020 09 30 basic Java
+{"errcode":0,"errmsg":"ok"}
+bash /data/script/branchDel.sh 2020 09 30 oms no -james
+{"errcode":0,"errmsg":"ok"}
+/data/devops/svn/views.py changed, reloading.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+August 03, 2020 - 06:34:36
+Django version 2.2.12, using settings 'devops.settings'
+Starting development server at http://0.0.0.0:8888/
+Quit the server with CONTROL-C.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+[03/Aug/2020 06:35:16] "POST /svn/branchAdjust/ HTTP/1.1" 200 36
