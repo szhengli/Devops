@@ -1,0 +1,58 @@
+pipeline {
+    agent any
+    stages {
+           stage('Build') {
+               steps {
+                     script {
+                        def get_serviceName = sh(script: '''
+                                          echo $SVN_URL |  awk -F '[/]+' '{ print  $NF }'
+                                          ''' , returnStdout: true).trim()
+                        env.serviceName = get_serviceName
+                     }
+
+                    sh '''
+                    mvn -f ${serviceName}-pom/pom.xml clean install package -P uat
+                    '''
+                   }
+            }
+            
+            stage ('Make image'){
+                  steps {
+                     sh '''
+                         env
+                         make_image.sh
+                         '''
+                  }
+            }
+            
+            stage ('Deploy'){
+                  steps {
+                     sh '''
+                        env
+                         paras=$(eval echo '$'"$serviceName"Replics)
+                         deploy.sh  ${paras}
+
+                         '''
+                  }
+            }
+
+            stage ('Check'){
+                  steps {
+
+                     sh '''
+                         paras=$(eval echo '$'"$serviceName"Replics)
+                         check_health.sh   ${paras}
+                         '''
+                  }
+            }
+    }
+    
+    post {
+           always {
+                             cleanWs()
+                    }
+       }
+
+
+}
+
