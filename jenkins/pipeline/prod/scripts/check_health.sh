@@ -8,7 +8,7 @@ declare -i count=0;
 while [[ $count -lt 60 ]]
 do 
     echo "!!!!!!!!!!!!!!!!!!!!!" 
-    status=$(kubectl get pod | grep ${serviceName} 2>/dev/null)
+    status=$(kubectl --context ${CONTEXT} get pod -n ${ENV} | grep -w ^${serviceName} 2>/dev/null)
     echo "---------------------------"
      if echo "${status}" | grep -q '0/1' ; then
         sleep 15
@@ -24,10 +24,10 @@ do
 done
 if [[ $count -lt  60 ]] ; then
     echo "部署成功"
+    if [[ $ENV == "prod" || $ENV == "prodv5" ]];then
+      sh /usr/bin/updateSvnRecord.sh
+    fi
 else
     echo "部署超时，可能失败"
     exit 1
 fi
-
-
-

@@ -1,0 +1,73 @@
+pipeline {
+    agent any	
+    stages {
+           stage('Build') {
+               steps {
+                     script {
+                        def get_serviceName = sh(script: '''
+                                          echo $SVN_URL |  awk -F '[/]+' '{ print  $NF }'
+                                          ''' , returnStdout: true).trim()
+                        env.serviceName = get_serviceName
+                        def get_ENV = sh(script: '''
+                                          echo $JOB_NAME | cut -d- -f1
+                                          ''' , returnStdout: true).trim()
+                        env.ENV = get_ENV
+                        def get_CONTEXT = sh(script: '''
+                                          echo $JOB_NAME | cut -d- -f2
+                                          ''' , returnStdout: true).trim()
+                        env.CONTEXT = get_CONTEXT
+                     }
+
+                    sh '''
+                    id && pwd
+                    mvn -f ${serviceName}-pom/pom.xml clean install package -P ${ENV} -Dmaven.test.skip=true
+                    '''
+                   }
+            }
+            
+            stage ('Make image'){
+                  steps {
+                     sh '''
+                         env
+                         make_image.sh
+                         '''
+                  }
+            }
+			
+            stage ('Deploy'){
+			       steps {
+                     sh '''
+                         env
+						 if [[ $ENV =~ prod|vip|pre ]]; then
+                            [[ -n $(eval echo '$'"$ENV""_""$serviceName"_Replics) ]] && paras=$(eval echo '$'"$ENV""_""$serviceName"_Replics) || paras="2 2"
+                         else
+                            [[ -n $(eval echo '$'"$ENV""_""$serviceName"_Replics) ]] && paras=$(eval echo '$'"$ENV""_""$serviceName"_Replics) || paras="1 1"
+                         fi
+                         deploy.sh  ${paras}
+                         '''
+					 }
+            }
+
+            stage ('Check'){
+                  steps {
+
+                     sh '''
+                         if [[ $ENV =~ prod|vip|pre ]]; then
+                            [[ -n $(eval echo '$'"$ENV""_""$serviceName"_Replics) ]] && paras=$(eval echo '$'"$ENV""_""$serviceName"_Replics) || paras="2 2"
+                         else
+                            [[ -n $(eval echo '$'"$ENV""_""$serviceName"_Replics) ]] && paras=$(eval echo '$'"$ENV""_""$serviceName"_Replics) || paras="1 1"
+                         fi
+                         check_health.sh   ${paras}
+                         '''
+                  }
+            }
+    }
+    
+    post {
+           always {
+                             cleanWs()
+                    }
+       }
+
+
+}
