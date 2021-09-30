@@ -1,0 +1,421 @@
+nohup: ignoring input
+[2021-06-21 11:52:52] DEBUG:asyncio: Using selector: EpollSelector selector_events.py:54
+hello
+ 
+ -------------- celery@svn v5.1.1 (sun-harmonics)
+--- ***** ----- 
+-- ******* ---- Linux-3.10.0-1127.13.1.el7.x86_64-x86_64-with-centos-7.8.2003-Core 2021-06-21 11:52:53
+- *** --- * --- 
+- ** ---------- [config]
+- ** ---------- .> app:         devops:0x7f4ab6d14e10
+- ** ---------- .> transport:   amqp://guest:**@192.168.2.253:5672//
+- ** ---------- .> results:     redis://192.168.2.253/
+- *** --- * --- .> concurrency: 4 (prefork)
+-- ******* ---- .> task events: OFF (enable -E to monitor tasks in this worker)
+--- ***** ----- 
+ -------------- [queues]
+                .> celery           exchange=celery(direct) key=celery
+                
+
+[tasks]
+  . svn.tasks.add
+  . svn.tasks.autoCreateJenkinsAuth
+  . svn.tasks.autoRemoveJenkinsAuth
+
+/usr/local/lib/python3.6/site-packages/celery/platforms.py:835: SecurityWarning: You're running the worker with superuser privileges: this is
+absolutely not recommended!
+
+Please specify a different user using the --uid option.
+
+User information: uid=0 euid=0 gid=0 egid=0
+
+  uid=uid, euid=euid, gid=gid, egid=egid,
+[2021-06-21 11:52:53,803: INFO/MainProcess] Connected to amqp://guest:**@192.168.2.253:5672//
+[2021-06-21 11:52:53,869: INFO/MainProcess] mingle: searching for neighbors
+[2021-06-21 11:52:54,963: INFO/MainProcess] mingle: all alone
+[2021-06-21 11:52:55,038: WARNING/MainProcess] /usr/local/lib/python3.6/site-packages/celery/fixups/django.py:204: UserWarning: Using settings.DEBUG leads to a memory
+            leak, never use this setting in production environments!
+  leak, never use this setting in production environments!''')
+
+[2021-06-21 11:52:55,039: INFO/MainProcess] celery@svn ready.
+[2021-06-21 11:52:55,183: INFO/MainProcess] Task svn.tasks.autoRemoveJenkinsAuth[8d57e434-dcbf-4bf8-8b33-b19ab2053837] received
+[2021-06-21 11:52:58,082: INFO/MainProcess] Events of group {task} enabled by remote.
+[2021-06-21 12:09:57,103: INFO/MainProcess] Task svn.tasks.autoCreateJenkinsAuth[9e54e7d6-89b4-4fe8-9b47-42fa4b2f274e] received
+[2021-06-21 12:09:57,107: INFO/MainProcess] Task svn.tasks.autoRemoveJenkinsAuth[10a633e4-e1bb-40f8-9a04-34bc63e8c12e] received
+/usr/local/lib/python3.6/site-packages/celery/platforms.py:835: SecurityWarning: You're running the worker with superuser privileges: this is
+absolutely not recommended!
+
+Please specify a different user using the --uid option.
+
+User information: uid=0 euid=0 gid=0 egid=0
+
+  uid=uid, euid=euid, gid=gid, egid=egid,
+[2021-06-21 12:09:57,980: WARNING/ForkPoolWorker-1] begin to create jenkins auth with:['chms@许祥', 'bosms_h5@张三']
+[2021-06-21 12:09:57,982: WARNING/ForkPoolWorker-1] 
+
+[2021-06-21 12:09:57,982: WARNING/ForkPoolWorker-1] #################
+[2021-06-21 12:09:57,983: WARNING/ForkPoolWorker-1] 
+
+[2021-06-21 12:09:57,983: WARNING/ForkPoolWorker-1] sysop: chms@许祥
+[2021-06-21 12:09:57,983: WARNING/ForkPoolWorker-1] 
+
+[2021-06-21 12:09:57,984: WARNING/ForkPoolWorker-1] #################
+[2021-06-21 12:09:57,984: WARNING/ForkPoolWorker-1] 
+
+[2021-06-21 12:09:59,545: WARNING/ForkPoolWorker-1] !!!!!!!!!!!!!!!!!!!!!!
+[2021-06-21 12:09:59,546: WARNING/ForkPoolWorker-1] 
+
+[2021-06-21 12:09:59,546: WARNING/ForkPoolWorker-1] prod-prod-chms
+[2021-06-21 12:09:59,546: WARNING/ForkPoolWorker-1] 
+
+[2021-06-21 12:09:59,547: WARNING/ForkPoolWorker-1] !!!!!!!!!!!!!!!!!!!!!!
+[2021-06-21 12:09:59,547: WARNING/ForkPoolWorker-1] 
+
+[2021-06-21 12:10:00,401: WARNING/ForkPoolWorker-1] #################
+[2021-06-21 12:10:00,402: WARNING/ForkPoolWorker-1] 
+
+[2021-06-21 12:10:00,402: WARNING/ForkPoolWorker-1] sysop: bosms_h5@张三
+[2021-06-21 12:10:00,403: WARNING/ForkPoolWorker-1] 
+
+[2021-06-21 12:10:00,403: WARNING/ForkPoolWorker-1] #################
+[2021-06-21 12:10:00,403: WARNING/ForkPoolWorker-1] 
+
+[2021-06-21 12:10:02,809: WARNING/ForkPoolWorker-1] !!!!!!!!!!!!!!!!!!!!!!
+[2021-06-21 12:10:02,809: WARNING/ForkPoolWorker-1] 
+
+[2021-06-21 12:10:02,810: WARNING/ForkPoolWorker-1] prod-bosms_h5(老板助手)
+[2021-06-21 12:10:02,810: WARNING/ForkPoolWorker-1] 
+
+[2021-06-21 12:10:02,811: WARNING/ForkPoolWorker-1] !!!!!!!!!!!!!!!!!!!!!!
+[2021-06-21 12:10:02,811: WARNING/ForkPoolWorker-1] 
+
+[2021-06-21 12:10:03,445: WARNING/ForkPoolWorker-1] comleted the autocreate in jenkins
+[2021-06-21 12:10:03,445: WARNING/ForkPoolWorker-1] 
+
+[2021-06-21 12:10:03,813: INFO/ForkPoolWorker-1] Task svn.tasks.autoCreateJenkinsAuth[9e54e7d6-89b4-4fe8-9b47-42fa4b2f274e] succeeded in 5.847783715464175s: 'comleted the autocreate in jenkins'
+[2021-06-21 12:25:07,995: WARNING/ForkPoolWorker-1] begin to remove jenkins auth
+[2021-06-21 12:25:07,996: WARNING/ForkPoolWorker-1] 
+
+[2021-06-21 12:25:07,996: WARNING/ForkPoolWorker-1] #################
+[2021-06-21 12:25:07,997: WARNING/ForkPoolWorker-1] 
+
+[2021-06-21 12:25:07,997: WARNING/ForkPoolWorker-1] sysop: chms@许祥
+[2021-06-21 12:25:07,997: WARNING/ForkPoolWorker-1] 
+
+[2021-06-21 12:25:07,998: WARNING/ForkPoolWorker-1] #################
+[2021-06-21 12:25:07,998: WARNING/ForkPoolWorker-1] 
+
+[2021-06-21 12:25:09,188: WARNING/ForkPoolWorker-1] #################
+[2021-06-21 12:25:09,189: WARNING/ForkPoolWorker-1] 
+
+[2021-06-21 12:25:09,189: WARNING/ForkPoolWorker-1] sysop: bosms_h5@苏三
+[2021-06-21 12:25:09,189: WARNING/ForkPoolWorker-1] 
+
+[2021-06-21 12:25:09,190: WARNING/ForkPoolWorker-1] #################
+[2021-06-21 12:25:09,190: WARNING/ForkPoolWorker-1] 
+
+[2021-06-21 12:25:09,894: WARNING/ForkPoolWorker-1] comleted the removal of auth in jenkins
+[2021-06-21 12:25:09,894: WARNING/ForkPoolWorker-1] 
+
+[2021-06-21 12:25:09,895: WARNING/ForkPoolWorker-1] 2021-06-21 12:25:09.895239
+[2021-06-21 12:25:09,895: WARNING/ForkPoolWorker-1] 
+
+[2021-06-21 12:25:10,847: INFO/ForkPoolWorker-1] Task svn.tasks.autoRemoveJenkinsAuth[8d57e434-dcbf-4bf8-8b33-b19ab2053837] succeeded in 2.86466399859637s: 'comleted the removal of auth in jenkins'
+[2021-06-21 13:01:04,368: WARNING/ForkPoolWorker-1] begin to remove jenkins auth
+[2021-06-21 13:01:04,368: WARNING/ForkPoolWorker-1] 
+
+[2021-06-21 13:01:04,369: WARNING/ForkPoolWorker-1] #################
+[2021-06-21 13:01:04,369: WARNING/ForkPoolWorker-1] 
+
+[2021-06-21 13:01:04,370: WARNING/ForkPoolWorker-1] sysop: chms@许祥
+[2021-06-21 13:01:04,371: WARNING/ForkPoolWorker-1] 
+
+[2021-06-21 13:01:04,371: WARNING/ForkPoolWorker-1] #################
+[2021-06-21 13:01:04,371: WARNING/ForkPoolWorker-1] 
+
+[2021-06-21 13:01:05,384: WARNING/ForkPoolWorker-1] #################
+[2021-06-21 13:01:05,385: WARNING/ForkPoolWorker-1] 
+
+[2021-06-21 13:01:05,386: WARNING/ForkPoolWorker-1] sysop: bosms_h5@张三
+[2021-06-21 13:01:05,386: WARNING/ForkPoolWorker-1] 
+
+[2021-06-21 13:01:05,386: WARNING/ForkPoolWorker-1] #################
+[2021-06-21 13:01:05,387: WARNING/ForkPoolWorker-1] 
+
+[2021-06-21 13:01:06,226: WARNING/ForkPoolWorker-1] comleted the removal of auth in jenkins
+[2021-06-21 13:01:06,227: WARNING/ForkPoolWorker-1] 
+
+[2021-06-21 13:01:06,227: WARNING/ForkPoolWorker-1] 2021-06-21 13:01:06.227686
+[2021-06-21 13:01:06,228: WARNING/ForkPoolWorker-1] 
+
+[2021-06-21 13:01:06,514: INFO/ForkPoolWorker-1] Task svn.tasks.autoRemoveJenkinsAuth[10a633e4-e1bb-40f8-9a04-34bc63e8c12e] succeeded in 2.1600155821070075s: 'comleted the removal of auth in jenkins'
+[2021-06-22 20:10:03,812: WARNING/MainProcess] consumer: Connection to broker lost. Trying to re-establish the connection...
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.6/site-packages/celery/worker/consumer/consumer.py", line 326, in start
+    blueprint.start(self)
+  File "/usr/local/lib/python3.6/site-packages/celery/bootsteps.py", line 116, in start
+    step.start(parent)
+  File "/usr/local/lib/python3.6/site-packages/celery/worker/consumer/consumer.py", line 618, in start
+    c.loop(*c.loop_args())
+  File "/usr/local/lib/python3.6/site-packages/celery/worker/loops.py", line 81, in asynloop
+    next(loop)
+  File "/usr/local/lib/python3.6/site-packages/kombu/asynchronous/hub.py", line 300, in create_loop
+    poll_timeout = fire_timers(propagate=propagate) if scheduled else 1
+  File "/usr/local/lib/python3.6/site-packages/kombu/asynchronous/hub.py", line 142, in fire_timers
+    entry()
+  File "/usr/local/lib/python3.6/site-packages/kombu/asynchronous/timer.py", line 65, in __call__
+    return self.fun(*self.args, **self.kwargs)
+  File "/usr/local/lib/python3.6/site-packages/kombu/asynchronous/timer.py", line 127, in _reschedules
+    return fun(*args, **kwargs)
+  File "/usr/local/lib/python3.6/site-packages/kombu/connection.py", line 307, in heartbeat_check
+    return self.transport.heartbeat_check(self.connection, rate=rate)
+  File "/usr/local/lib/python3.6/site-packages/kombu/transport/pyamqp.py", line 181, in heartbeat_check
+    return connection.heartbeat_tick(rate=rate)
+  File "/usr/local/lib/python3.6/site-packages/amqp/connection.py", line 759, in heartbeat_tick
+    self.send_heartbeat()
+  File "/usr/local/lib/python3.6/site-packages/amqp/connection.py", line 710, in send_heartbeat
+    self.frame_writer(8, 0, None, None, None)
+  File "/usr/local/lib/python3.6/site-packages/amqp/method_framing.py", line 183, in write_frame
+    write(view[:offset])
+  File "/usr/local/lib/python3.6/site-packages/amqp/transport.py", line 352, in write
+    self._write(s)
+TimeoutError: [Errno 110] Connection timed out
+[2021-06-22 20:10:03,833: WARNING/MainProcess] /usr/local/lib/python3.6/site-packages/celery/worker/consumer/consumer.py:361: CPendingDeprecationWarning: 
+In Celery 5.1 we introduced an optional breaking change which
+on connection loss cancels all currently executed tasks with late acknowledgement enabled.
+These tasks cannot be acknowledged as the connection is gone, and the tasks are automatically redelivered back to the queue.
+You can enable this behavior using the worker_cancel_long_running_tasks_on_connection_loss setting.
+In Celery 5.1 it is set to False by default. The setting will be set to True by default in Celery 6.0.
+
+  warnings.warn(CANCEL_TASKS_BY_DEFAULT, CPendingDeprecationWarning)
+
+[2021-06-22 20:10:03,880: INFO/MainProcess] Connected to amqp://guest:**@192.168.2.253:5672//
+[2021-06-22 20:10:03,951: INFO/MainProcess] mingle: searching for neighbors
+[2021-06-22 20:10:05,062: INFO/MainProcess] mingle: all alone
+[2021-06-28 11:15:02,051: INFO/MainProcess] Task svn.tasks.autoCreateJenkinsAuth[32e16217-f489-4c8f-9f0f-49406f085694] received
+[2021-06-28 11:15:02,056: INFO/MainProcess] Task svn.tasks.autoRemoveJenkinsAuth[e9830870-ec7d-4481-9198-5cf2e9907d00] received
+[2021-06-28 11:15:02,865: WARNING/ForkPoolWorker-1] begin to remove jenkins auth
+[2021-06-28 11:15:02,866: WARNING/ForkPoolWorker-1] 
+
+[2021-06-28 11:15:02,866: WARNING/ForkPoolWorker-1] #################
+[2021-06-28 11:15:02,866: WARNING/ForkPoolWorker-1] 
+
+[2021-06-28 11:15:02,867: WARNING/ForkPoolWorker-1] sysop: chms@许祥
+[2021-06-28 11:15:02,867: WARNING/ForkPoolWorker-1] 
+
+[2021-06-28 11:15:02,867: WARNING/ForkPoolWorker-1] #################
+[2021-06-28 11:15:02,868: WARNING/ForkPoolWorker-1] 
+
+/usr/local/lib/python3.6/site-packages/celery/platforms.py:835: SecurityWarning: You're running the worker with superuser privileges: this is
+absolutely not recommended!
+
+Please specify a different user using the --uid option.
+
+User information: uid=0 euid=0 gid=0 egid=0
+
+  uid=uid, euid=euid, gid=gid, egid=egid,
+[2021-06-28 11:15:02,992: WARNING/ForkPoolWorker-3] begin to create jenkins auth with:['chms@许祥', 'bosms_h5@苏三']
+[2021-06-28 11:15:02,993: WARNING/ForkPoolWorker-3] 
+
+[2021-06-28 11:15:02,994: WARNING/ForkPoolWorker-3] #################
+[2021-06-28 11:15:02,994: WARNING/ForkPoolWorker-3] 
+
+[2021-06-28 11:15:02,994: WARNING/ForkPoolWorker-3] sysop: chms@许祥
+[2021-06-28 11:15:02,995: WARNING/ForkPoolWorker-3] 
+
+[2021-06-28 11:15:02,995: WARNING/ForkPoolWorker-3] #################
+[2021-06-28 11:15:02,995: WARNING/ForkPoolWorker-3] 
+
+[2021-06-28 11:15:10,320: WARNING/ForkPoolWorker-3] !!!!!!!!!!!!!!!!!!!!!!
+[2021-06-28 11:15:10,321: WARNING/ForkPoolWorker-3] 
+
+[2021-06-28 11:15:10,321: WARNING/ForkPoolWorker-3] prod-prod-chms
+[2021-06-28 11:15:10,321: WARNING/ForkPoolWorker-3] 
+
+[2021-06-28 11:15:10,321: WARNING/ForkPoolWorker-3] !!!!!!!!!!!!!!!!!!!!!!
+[2021-06-28 11:15:10,322: WARNING/ForkPoolWorker-3] 
+
+[2021-06-28 11:15:11,962: WARNING/ForkPoolWorker-1] #################
+[2021-06-28 11:15:11,963: WARNING/ForkPoolWorker-1] 
+
+[2021-06-28 11:15:11,963: WARNING/ForkPoolWorker-1] sysop: bosms_h5@苏三
+[2021-06-28 11:15:11,963: WARNING/ForkPoolWorker-1] 
+
+[2021-06-28 11:15:11,964: WARNING/ForkPoolWorker-1] #################
+[2021-06-28 11:15:11,964: WARNING/ForkPoolWorker-1] 
+
+[2021-06-28 11:15:14,086: WARNING/ForkPoolWorker-3] #################
+[2021-06-28 11:15:14,087: WARNING/ForkPoolWorker-3] 
+
+[2021-06-28 11:15:14,087: WARNING/ForkPoolWorker-3] sysop: bosms_h5@苏三
+[2021-06-28 11:15:14,087: WARNING/ForkPoolWorker-3] 
+
+[2021-06-28 11:15:14,088: WARNING/ForkPoolWorker-3] #################
+[2021-06-28 11:15:14,088: WARNING/ForkPoolWorker-3] 
+
+[2021-06-28 11:15:15,131: WARNING/ForkPoolWorker-1] comleted the removal of auth in jenkins
+[2021-06-28 11:15:15,131: WARNING/ForkPoolWorker-1] 
+
+[2021-06-28 11:15:15,132: WARNING/ForkPoolWorker-1] 2021-06-28 11:15:15.132103
+[2021-06-28 11:15:15,132: WARNING/ForkPoolWorker-1] 
+
+[2021-06-28 11:15:15,881: INFO/ForkPoolWorker-1] Task svn.tasks.autoRemoveJenkinsAuth[e9830870-ec7d-4481-9198-5cf2e9907d00] succeeded in 13.024924104101956s: 'comleted the removal of auth in jenkins'
+[2021-06-28 11:15:20,366: WARNING/ForkPoolWorker-3] !!!!!!!!!!!!!!!!!!!!!!
+[2021-06-28 11:15:20,366: WARNING/ForkPoolWorker-3] 
+
+[2021-06-28 11:15:20,367: WARNING/ForkPoolWorker-3] prod-bosms_h5(老板助手)
+[2021-06-28 11:15:20,367: WARNING/ForkPoolWorker-3] 
+
+[2021-06-28 11:15:20,367: WARNING/ForkPoolWorker-3] !!!!!!!!!!!!!!!!!!!!!!
+[2021-06-28 11:15:20,367: WARNING/ForkPoolWorker-3] 
+
+[2021-06-28 11:15:24,005: WARNING/ForkPoolWorker-3] comleted the autocreate in jenkins
+[2021-06-28 11:15:24,006: WARNING/ForkPoolWorker-3] 
+
+[2021-06-28 11:15:24,299: INFO/ForkPoolWorker-3] Task svn.tasks.autoCreateJenkinsAuth[32e16217-f489-4c8f-9f0f-49406f085694] succeeded in 21.32124885637313s: 'comleted the autocreate in jenkins'
+[2021-06-28 21:29:06,320: WARNING/MainProcess] consumer: Connection to broker lost. Trying to re-establish the connection...
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.6/site-packages/celery/worker/consumer/consumer.py", line 326, in start
+    blueprint.start(self)
+  File "/usr/local/lib/python3.6/site-packages/celery/bootsteps.py", line 116, in start
+    step.start(parent)
+  File "/usr/local/lib/python3.6/site-packages/celery/worker/consumer/consumer.py", line 618, in start
+    c.loop(*c.loop_args())
+  File "/usr/local/lib/python3.6/site-packages/celery/worker/loops.py", line 81, in asynloop
+    next(loop)
+  File "/usr/local/lib/python3.6/site-packages/kombu/asynchronous/hub.py", line 300, in create_loop
+    poll_timeout = fire_timers(propagate=propagate) if scheduled else 1
+  File "/usr/local/lib/python3.6/site-packages/kombu/asynchronous/hub.py", line 142, in fire_timers
+    entry()
+  File "/usr/local/lib/python3.6/site-packages/kombu/asynchronous/timer.py", line 65, in __call__
+    return self.fun(*self.args, **self.kwargs)
+  File "/usr/local/lib/python3.6/site-packages/kombu/asynchronous/timer.py", line 127, in _reschedules
+    return fun(*args, **kwargs)
+  File "/usr/local/lib/python3.6/site-packages/kombu/connection.py", line 307, in heartbeat_check
+    return self.transport.heartbeat_check(self.connection, rate=rate)
+  File "/usr/local/lib/python3.6/site-packages/kombu/transport/pyamqp.py", line 181, in heartbeat_check
+    return connection.heartbeat_tick(rate=rate)
+  File "/usr/local/lib/python3.6/site-packages/amqp/connection.py", line 759, in heartbeat_tick
+    self.send_heartbeat()
+  File "/usr/local/lib/python3.6/site-packages/amqp/connection.py", line 710, in send_heartbeat
+    self.frame_writer(8, 0, None, None, None)
+  File "/usr/local/lib/python3.6/site-packages/amqp/method_framing.py", line 183, in write_frame
+    write(view[:offset])
+  File "/usr/local/lib/python3.6/site-packages/amqp/transport.py", line 352, in write
+    self._write(s)
+TimeoutError: [Errno 110] Connection timed out
+[2021-06-28 21:29:06,324: WARNING/MainProcess] /usr/local/lib/python3.6/site-packages/celery/worker/consumer/consumer.py:361: CPendingDeprecationWarning: 
+In Celery 5.1 we introduced an optional breaking change which
+on connection loss cancels all currently executed tasks with late acknowledgement enabled.
+These tasks cannot be acknowledged as the connection is gone, and the tasks are automatically redelivered back to the queue.
+You can enable this behavior using the worker_cancel_long_running_tasks_on_connection_loss setting.
+In Celery 5.1 it is set to False by default. The setting will be set to True by default in Celery 6.0.
+
+  warnings.warn(CANCEL_TASKS_BY_DEFAULT, CPendingDeprecationWarning)
+
+[2021-06-28 21:29:06,379: INFO/MainProcess] Connected to amqp://guest:**@192.168.2.253:5672//
+[2021-06-28 21:29:06,439: INFO/MainProcess] mingle: searching for neighbors
+[2021-06-28 21:29:07,581: INFO/MainProcess] mingle: all alone
+[2021-07-03 17:59:39,086: WARNING/MainProcess] consumer: Connection to broker lost. Trying to re-establish the connection...
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.6/site-packages/celery/worker/consumer/consumer.py", line 326, in start
+    blueprint.start(self)
+  File "/usr/local/lib/python3.6/site-packages/celery/bootsteps.py", line 116, in start
+    step.start(parent)
+  File "/usr/local/lib/python3.6/site-packages/celery/worker/consumer/consumer.py", line 618, in start
+    c.loop(*c.loop_args())
+  File "/usr/local/lib/python3.6/site-packages/celery/worker/loops.py", line 81, in asynloop
+    next(loop)
+  File "/usr/local/lib/python3.6/site-packages/kombu/asynchronous/hub.py", line 361, in create_loop
+    cb(*cbargs)
+  File "/usr/local/lib/python3.6/site-packages/kombu/transport/base.py", line 235, in on_readable
+    reader(loop)
+  File "/usr/local/lib/python3.6/site-packages/kombu/transport/base.py", line 217, in _read
+    drain_events(timeout=0)
+  File "/usr/local/lib/python3.6/site-packages/amqp/connection.py", line 523, in drain_events
+    while not self.blocking_read(timeout):
+  File "/usr/local/lib/python3.6/site-packages/amqp/connection.py", line 528, in blocking_read
+    frame = self.transport.read_frame()
+  File "/usr/local/lib/python3.6/site-packages/amqp/transport.py", line 299, in read_frame
+    frame_header = read(7, True)
+  File "/usr/local/lib/python3.6/site-packages/amqp/transport.py", line 628, in _read
+    s = recv(n - len(rbuf))
+TimeoutError: [Errno 110] Connection timed out
+[2021-07-03 17:59:39,106: WARNING/MainProcess] /usr/local/lib/python3.6/site-packages/celery/worker/consumer/consumer.py:361: CPendingDeprecationWarning: 
+In Celery 5.1 we introduced an optional breaking change which
+on connection loss cancels all currently executed tasks with late acknowledgement enabled.
+These tasks cannot be acknowledged as the connection is gone, and the tasks are automatically redelivered back to the queue.
+You can enable this behavior using the worker_cancel_long_running_tasks_on_connection_loss setting.
+In Celery 5.1 it is set to False by default. The setting will be set to True by default in Celery 6.0.
+
+  warnings.warn(CANCEL_TASKS_BY_DEFAULT, CPendingDeprecationWarning)
+
+[2021-07-03 17:59:39,163: INFO/MainProcess] Connected to amqp://guest:**@192.168.2.253:5672//
+[2021-07-03 17:59:39,214: INFO/MainProcess] mingle: searching for neighbors
+[2021-07-03 17:59:40,302: INFO/MainProcess] mingle: all alone
+[2021-07-07 10:34:55,115: INFO/MainProcess] Task svn.tasks.autoCreateJenkinsAuth[8704443b-665c-4dd6-9577-f355e48c4b99] received
+[2021-07-07 10:34:55,117: INFO/MainProcess] Task svn.tasks.autoRemoveJenkinsAuth[59d3f6ab-53d6-445b-865c-3735a69b92ec] received
+[2021-07-07 10:34:59,510: WARNING/ForkPoolWorker-1] begin to create jenkins auth with:['chms@张三', 'chmsv5@李四']
+[2021-07-07 10:34:59,511: WARNING/ForkPoolWorker-1] 
+
+[2021-07-07 10:34:59,511: WARNING/ForkPoolWorker-1] #################
+[2021-07-07 10:34:59,511: WARNING/ForkPoolWorker-1] 
+
+[2021-07-07 10:34:59,512: WARNING/ForkPoolWorker-1] sysop: chms@张三
+[2021-07-07 10:34:59,512: WARNING/ForkPoolWorker-1] 
+
+[2021-07-07 10:34:59,512: WARNING/ForkPoolWorker-1] #################
+[2021-07-07 10:34:59,512: WARNING/ForkPoolWorker-1] 
+
+[2021-07-07 10:35:01,711: WARNING/ForkPoolWorker-1] !!!!!!!!!!!!!!!!!!!!!!
+[2021-07-07 10:35:01,711: WARNING/ForkPoolWorker-1] 
+
+[2021-07-07 10:35:01,712: WARNING/ForkPoolWorker-1] prod-prod-chms
+[2021-07-07 10:35:01,712: WARNING/ForkPoolWorker-1] 
+
+[2021-07-07 10:35:01,713: WARNING/ForkPoolWorker-1] !!!!!!!!!!!!!!!!!!!!!!
+[2021-07-07 10:35:01,714: WARNING/ForkPoolWorker-1] 
+
+[2021-07-07 10:35:02,910: WARNING/ForkPoolWorker-1] #################
+[2021-07-07 10:35:02,910: WARNING/ForkPoolWorker-1] 
+
+[2021-07-07 10:35:02,911: WARNING/ForkPoolWorker-1] sysop: chmsv5@李四
+[2021-07-07 10:35:02,911: WARNING/ForkPoolWorker-1] 
+
+[2021-07-07 10:35:02,911: WARNING/ForkPoolWorker-1] #################
+[2021-07-07 10:35:02,912: WARNING/ForkPoolWorker-1] 
+
+[2021-07-07 10:35:06,583: WARNING/ForkPoolWorker-1] comleted the autocreate in jenkins
+[2021-07-07 10:35:06,584: WARNING/ForkPoolWorker-1] 
+
+[2021-07-07 10:35:06,855: INFO/ForkPoolWorker-1] Task svn.tasks.autoCreateJenkinsAuth[8704443b-665c-4dd6-9577-f355e48c4b99] succeeded in 7.350654387846589s: 'comleted the autocreate in jenkins'
+[2021-07-07 11:35:04,845: WARNING/ForkPoolWorker-1] begin to remove jenkins auth
+[2021-07-07 11:35:04,846: WARNING/ForkPoolWorker-1] 
+
+[2021-07-07 11:35:04,846: WARNING/ForkPoolWorker-1] #################
+[2021-07-07 11:35:04,847: WARNING/ForkPoolWorker-1] 
+
+[2021-07-07 11:35:04,847: WARNING/ForkPoolWorker-1] sysop: chms@张三
+[2021-07-07 11:35:04,847: WARNING/ForkPoolWorker-1] 
+
+[2021-07-07 11:35:04,847: WARNING/ForkPoolWorker-1] #################
+[2021-07-07 11:35:04,847: WARNING/ForkPoolWorker-1] 
+
+[2021-07-07 11:35:05,793: WARNING/ForkPoolWorker-1] #################
+[2021-07-07 11:35:05,794: WARNING/ForkPoolWorker-1] 
+
+[2021-07-07 11:35:05,794: WARNING/ForkPoolWorker-1] sysop: chmsv5@李四
+[2021-07-07 11:35:05,794: WARNING/ForkPoolWorker-1] 
+
+[2021-07-07 11:35:05,795: WARNING/ForkPoolWorker-1] #################
+[2021-07-07 11:35:05,795: WARNING/ForkPoolWorker-1] 
+
+[2021-07-07 11:35:06,760: WARNING/ForkPoolWorker-1] comleted the removal of auth in jenkins
+[2021-07-07 11:35:06,761: WARNING/ForkPoolWorker-1] 
+
+[2021-07-07 11:35:06,762: WARNING/ForkPoolWorker-1] 2021-07-07 11:35:06.762117
+[2021-07-07 11:35:06,762: WARNING/ForkPoolWorker-1] 
+
+[2021-07-07 11:35:07,022: INFO/ForkPoolWorker-1] Task svn.tasks.autoRemoveJenkinsAuth[59d3f6ab-53d6-445b-865c-3735a69b92ec] succeeded in 2.18063085898757s: 'comleted the removal of auth in jenkins'
+
+worker: Warm shutdown (MainProcess)

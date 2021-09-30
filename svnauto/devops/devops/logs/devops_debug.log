@@ -1,4 +1,0 @@
-[2021-06-21 11:18:04] DEBUG:asyncio: Using selector: EpollSelector selector_events.py:54
-[2021-06-21 11:47:57] DEBUG:asyncio: Using selector: EpollSelector selector_events.py:54
-[2021-06-21 11:51:58] DEBUG:asyncio: Using selector: EpollSelector selector_events.py:54
-[2021-06-21 11:52:52] DEBUG:asyncio: Using selector: EpollSelector selector_events.py:54

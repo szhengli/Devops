@@ -1,0 +1,681 @@
+[2021-07-12 09:38:08] DEBUG:asyncio: Using selector: EpollSelector selector_events.py:54
+hello
+ 
+ -------------- celery@svn v5.1.1 (sun-harmonics)
+--- ***** ----- 
+-- ******* ---- Linux-3.10.0-1127.13.1.el7.x86_64-x86_64-with-centos-7.8.2003-Core 2021-07-12 09:38:09
+- *** --- * --- 
+- ** ---------- [config]
+- ** ---------- .> app:         devops:0x7ff061182e48
+- ** ---------- .> transport:   amqp://guest:**@192.168.2.253:5672//
+- ** ---------- .> results:     redis://192.168.2.253/
+- *** --- * --- .> concurrency: 4 (prefork)
+-- ******* ---- .> task events: OFF (enable -E to monitor tasks in this worker)
+--- ***** ----- 
+ -------------- [queues]
+                .> celery           exchange=celery(direct) key=celery
+                
+
+[tasks]
+  . svn.tasks.add
+  . svn.tasks.autoCreateJenkinsAuth
+  . svn.tasks.autoRemoveJenkinsAuth
+
+/usr/local/lib/python3.6/site-packages/celery/platforms.py:835: SecurityWarning: You're running the worker with superuser privileges: this is
+absolutely not recommended!
+
+Please specify a different user using the --uid option.
+
+User information: uid=0 euid=0 gid=0 egid=0
+
+  uid=uid, euid=euid, gid=gid, egid=egid,
+[2021-07-12 09:38:09,721: INFO/MainProcess] Connected to amqp://guest:**@192.168.2.253:5672//
+[2021-07-12 09:38:09,767: INFO/MainProcess] mingle: searching for neighbors
+[2021-07-12 09:38:10,852: INFO/MainProcess] mingle: all alone
+[2021-07-12 09:38:10,924: WARNING/MainProcess] /usr/local/lib/python3.6/site-packages/celery/fixups/django.py:204: UserWarning: Using settings.DEBUG leads to a memory
+            leak, never use this setting in production environments!
+  leak, never use this setting in production environments!''')
+
+[2021-07-12 09:38:10,925: INFO/MainProcess] celery@svn ready.
+[2021-07-12 09:38:12,979: INFO/MainProcess] Events of group {task} enabled by remote.
+[2021-07-12 18:00:10,752: INFO/MainProcess] Task svn.tasks.autoCreateJenkinsAuth[f4863fb1-eb0e-4adc-af39-56780235eeef] received
+[2021-07-12 18:00:10,756: INFO/MainProcess] Task svn.tasks.autoRemoveJenkinsAuth[7d930de1-11bb-4a8f-9180-dfcc8a285f4a] received
+/usr/local/lib/python3.6/site-packages/celery/platforms.py:835: SecurityWarning: You're running the worker with superuser privileges: this is
+absolutely not recommended!
+
+Please specify a different user using the --uid option.
+
+User information: uid=0 euid=0 gid=0 egid=0
+
+  uid=uid, euid=euid, gid=gid, egid=egid,
+[2021-07-12 18:00:17,998: WARNING/ForkPoolWorker-1] begin to create jenkins auth with:['xcxsc_h5']
+[2021-07-12 18:00:18,000: WARNING/ForkPoolWorker-1] 
+
+[2021-07-12 18:00:18,001: WARNING/ForkPoolWorker-1] service entry is in wrong format
+[2021-07-12 18:00:18,002: WARNING/ForkPoolWorker-1] 
+
+[2021-07-12 18:00:18,002: WARNING/ForkPoolWorker-1] #################
+[2021-07-12 18:00:18,002: WARNING/ForkPoolWorker-1] 
+
+[2021-07-12 18:00:18,002: WARNING/ForkPoolWorker-1] sysop: xcxsc_h5
+[2021-07-12 18:00:18,003: WARNING/ForkPoolWorker-1] 
+
+[2021-07-12 18:00:18,003: WARNING/ForkPoolWorker-1] #################
+[2021-07-12 18:00:18,003: WARNING/ForkPoolWorker-1] 
+
+[2021-07-12 18:00:18,013: ERROR/ForkPoolWorker-1] Task svn.tasks.autoCreateJenkinsAuth[f4863fb1-eb0e-4adc-af39-56780235eeef] raised unexpected: ValueError('not enough values to unpack (expected 2, got 1)',)
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.6/site-packages/celery/app/trace.py", line 450, in trace_task
+    R = retval = fun(*args, **kwargs)
+  File "/usr/local/lib/python3.6/site-packages/celery/app/trace.py", line 731, in __protected_call__
+    return self.run(*args, **kwargs)
+  File "/data/devops/svn/tasks.py", line 29, in autoCreateJenkinsAuth
+    autoAuth(sysops, target, branch)
+  File "/data/devops/svn/jenkinsop.py", line 136, in autoAuth
+    role, user, service, pattern = getRoleAndPattern(sysop, target)
+  File "/data/devops/svn/jenkinsop.py", line 116, in getRoleAndPattern
+    service, user = sysop.split("@")
+ValueError: not enough values to unpack (expected 2, got 1)
+[2021-07-13 15:06:58,565: INFO/MainProcess] Task svn.tasks.autoCreateJenkinsAuth[5ce04d1a-57e7-471a-8580-9d450fe3564e] received
+[2021-07-13 15:06:58,568: INFO/MainProcess] Task svn.tasks.autoRemoveJenkinsAuth[3d6f2634-5172-4bbb-9ec5-f5282b0ad5c2] received
+[2021-07-13 15:07:06,707: WARNING/ForkPoolWorker-1] begin to create jenkins auth with:['pays', '@张超']
+[2021-07-13 15:07:06,708: WARNING/ForkPoolWorker-1] 
+
+[2021-07-13 15:07:06,709: WARNING/ForkPoolWorker-1] service entry is in wrong format
+[2021-07-13 15:07:06,709: WARNING/ForkPoolWorker-1] 
+
+[2021-07-13 15:07:06,711: WARNING/ForkPoolWorker-1] #################
+[2021-07-13 15:07:06,711: WARNING/ForkPoolWorker-1] 
+
+[2021-07-13 15:07:06,712: WARNING/ForkPoolWorker-1] sysop: pays
+[2021-07-13 15:07:06,712: WARNING/ForkPoolWorker-1] 
+
+[2021-07-13 15:07:06,712: WARNING/ForkPoolWorker-1] #################
+[2021-07-13 15:07:06,713: WARNING/ForkPoolWorker-1] 
+
+[2021-07-13 15:07:06,718: ERROR/ForkPoolWorker-1] Task svn.tasks.autoCreateJenkinsAuth[5ce04d1a-57e7-471a-8580-9d450fe3564e] raised unexpected: ValueError('not enough values to unpack (expected 2, got 1)',)
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.6/site-packages/celery/app/trace.py", line 450, in trace_task
+    R = retval = fun(*args, **kwargs)
+  File "/usr/local/lib/python3.6/site-packages/celery/app/trace.py", line 731, in __protected_call__
+    return self.run(*args, **kwargs)
+  File "/data/devops/svn/tasks.py", line 29, in autoCreateJenkinsAuth
+    autoAuth(sysops, target, branch)
+  File "/data/devops/svn/jenkinsop.py", line 136, in autoAuth
+    role, user, service, pattern = getRoleAndPattern(sysop, target)
+  File "/data/devops/svn/jenkinsop.py", line 116, in getRoleAndPattern
+    service, user = sysop.split("@")
+ValueError: not enough values to unpack (expected 2, got 1)
+[2021-07-13 15:22:38,905: INFO/MainProcess] Task svn.tasks.autoCreateJenkinsAuth[ae615b9c-5494-411f-9879-2454464309ca] received
+[2021-07-13 15:22:38,908: INFO/MainProcess] Task svn.tasks.autoRemoveJenkinsAuth[48f0f002-f593-4401-9fb8-0c46e43faf8a] received
+[2021-07-13 15:22:40,797: WARNING/ForkPoolWorker-1] begin to create jenkins auth with:['pays@张超']
+[2021-07-13 15:22:40,797: WARNING/ForkPoolWorker-1] 
+
+[2021-07-13 15:22:40,798: WARNING/ForkPoolWorker-1] #################
+[2021-07-13 15:22:40,798: WARNING/ForkPoolWorker-1] 
+
+[2021-07-13 15:22:40,798: WARNING/ForkPoolWorker-1] sysop: pays@张超
+[2021-07-13 15:22:40,799: WARNING/ForkPoolWorker-1] 
+
+[2021-07-13 15:22:40,799: WARNING/ForkPoolWorker-1] #################
+[2021-07-13 15:22:40,799: WARNING/ForkPoolWorker-1] 
+
+[2021-07-13 15:22:42,038: WARNING/ForkPoolWorker-1] !!!!!!!!!!!!!!!!!!!!!!
+[2021-07-13 15:22:42,038: WARNING/ForkPoolWorker-1] 
+
+[2021-07-13 15:22:42,038: WARNING/ForkPoolWorker-1] prod-prod-pays
+[2021-07-13 15:22:42,039: WARNING/ForkPoolWorker-1] 
+
+[2021-07-13 15:22:42,039: WARNING/ForkPoolWorker-1] !!!!!!!!!!!!!!!!!!!!!!
+[2021-07-13 15:22:42,039: WARNING/ForkPoolWorker-1] 
+
+[2021-07-13 15:22:42,315: WARNING/ForkPoolWorker-1] !!!!!!!!!!!!!!!!!!!!!!
+[2021-07-13 15:22:42,316: WARNING/ForkPoolWorker-1] 
+
+[2021-07-13 15:22:42,316: WARNING/ForkPoolWorker-1] prodv5-prodv5-paysv5
+[2021-07-13 15:22:42,317: WARNING/ForkPoolWorker-1] 
+
+[2021-07-13 15:22:42,317: WARNING/ForkPoolWorker-1] !!!!!!!!!!!!!!!!!!!!!!
+[2021-07-13 15:22:42,317: WARNING/ForkPoolWorker-1] 
+
+[2021-07-13 15:22:42,565: WARNING/ForkPoolWorker-1] comleted the autocreate in jenkins
+[2021-07-13 15:22:42,565: WARNING/ForkPoolWorker-1] 
+
+[2021-07-13 15:22:42,815: INFO/ForkPoolWorker-1] Task svn.tasks.autoCreateJenkinsAuth[ae615b9c-5494-411f-9879-2454464309ca] succeeded in 2.022529484704137s: 'comleted the autocreate in jenkins'
+[2021-07-13 15:23:03,954: INFO/MainProcess] Task svn.tasks.autoCreateJenkinsAuth[9821e787-7d8a-4be0-a440-b9a87ea3586b] received
+[2021-07-13 15:23:03,957: INFO/MainProcess] Task svn.tasks.autoRemoveJenkinsAuth[b6f6b5f1-4814-46f9-9085-ea013c868b08] received
+[2021-07-13 15:23:12,876: WARNING/ForkPoolWorker-1] begin to create jenkins auth with:['urms@张超']
+[2021-07-13 15:23:12,877: WARNING/ForkPoolWorker-1] 
+
+[2021-07-13 15:23:12,877: WARNING/ForkPoolWorker-1] #################
+[2021-07-13 15:23:12,877: WARNING/ForkPoolWorker-1] 
+
+[2021-07-13 15:23:12,878: WARNING/ForkPoolWorker-1] sysop: urms@张超
+[2021-07-13 15:23:12,878: WARNING/ForkPoolWorker-1] 
+
+[2021-07-13 15:23:12,879: WARNING/ForkPoolWorker-1] #################
+[2021-07-13 15:23:12,880: WARNING/ForkPoolWorker-1] 
+
+[2021-07-13 15:23:13,878: WARNING/ForkPoolWorker-1] !!!!!!!!!!!!!!!!!!!!!!
+[2021-07-13 15:23:13,878: WARNING/ForkPoolWorker-1] 
+
+[2021-07-13 15:23:13,878: WARNING/ForkPoolWorker-1] prod-prod-urms
+[2021-07-13 15:23:13,879: WARNING/ForkPoolWorker-1] 
+
+[2021-07-13 15:23:13,879: WARNING/ForkPoolWorker-1] !!!!!!!!!!!!!!!!!!!!!!
+[2021-07-13 15:23:13,879: WARNING/ForkPoolWorker-1] 
+
+[2021-07-13 15:23:14,166: WARNING/ForkPoolWorker-1] !!!!!!!!!!!!!!!!!!!!!!
+[2021-07-13 15:23:14,166: WARNING/ForkPoolWorker-1] 
+
+[2021-07-13 15:23:14,166: WARNING/ForkPoolWorker-1] prodv5-prodv5-urmsv5
+[2021-07-13 15:23:14,167: WARNING/ForkPoolWorker-1] 
+
+[2021-07-13 15:23:14,167: WARNING/ForkPoolWorker-1] !!!!!!!!!!!!!!!!!!!!!!
+[2021-07-13 15:23:14,167: WARNING/ForkPoolWorker-1] 
+
+[2021-07-13 15:23:14,412: WARNING/ForkPoolWorker-1] comleted the autocreate in jenkins
+[2021-07-13 15:23:14,413: WARNING/ForkPoolWorker-1] 
+
+[2021-07-13 15:23:14,646: INFO/ForkPoolWorker-1] Task svn.tasks.autoCreateJenkinsAuth[9821e787-7d8a-4be0-a440-b9a87ea3586b] succeeded in 1.7732745837420225s: 'comleted the autocreate in jenkins'
+[2021-07-13 16:18:20,865: INFO/MainProcess] Task svn.tasks.autoCreateJenkinsAuth[6fb93aa2-3def-4ead-9447-02affc42c869] received
+[2021-07-13 16:18:20,869: INFO/MainProcess] Task svn.tasks.autoRemoveJenkinsAuth[81357962-30d6-4d3c-a2a6-d920c994bd3b] received
+[2021-07-13 16:18:25,121: WARNING/ForkPoolWorker-1] begin to create jenkins auth with:['oms@张超', 'mbms@张超']
+[2021-07-13 16:18:25,122: WARNING/ForkPoolWorker-1] 
+
+[2021-07-13 16:18:25,122: WARNING/ForkPoolWorker-1] #################
+[2021-07-13 16:18:25,122: WARNING/ForkPoolWorker-1] 
+
+[2021-07-13 16:18:25,123: WARNING/ForkPoolWorker-1] sysop: oms@张超
+[2021-07-13 16:18:25,123: WARNING/ForkPoolWorker-1] 
+
+[2021-07-13 16:18:25,124: WARNING/ForkPoolWorker-1] #################
+[2021-07-13 16:18:25,124: WARNING/ForkPoolWorker-1] 
+
+[2021-07-13 16:18:26,187: WARNING/ForkPoolWorker-1] !!!!!!!!!!!!!!!!!!!!!!
+[2021-07-13 16:18:26,188: WARNING/ForkPoolWorker-1] 
+
+[2021-07-13 16:18:26,189: WARNING/ForkPoolWorker-1] prod-prod-oms
+[2021-07-13 16:18:26,189: WARNING/ForkPoolWorker-1] 
+
+[2021-07-13 16:18:26,189: WARNING/ForkPoolWorker-1] !!!!!!!!!!!!!!!!!!!!!!
+[2021-07-13 16:18:26,190: WARNING/ForkPoolWorker-1] 
+
+[2021-07-13 16:18:26,532: WARNING/ForkPoolWorker-1] !!!!!!!!!!!!!!!!!!!!!!
+[2021-07-13 16:18:26,532: WARNING/ForkPoolWorker-1] 
+
+[2021-07-13 16:18:26,533: WARNING/ForkPoolWorker-1] prodv5-prodv5-omsv5
+[2021-07-13 16:18:26,533: WARNING/ForkPoolWorker-1] 
+
+[2021-07-13 16:18:26,534: WARNING/ForkPoolWorker-1] !!!!!!!!!!!!!!!!!!!!!!
+[2021-07-13 16:18:26,535: WARNING/ForkPoolWorker-1] 
+
+[2021-07-13 16:18:26,791: WARNING/ForkPoolWorker-1] #################
+[2021-07-13 16:18:26,792: WARNING/ForkPoolWorker-1] 
+
+[2021-07-13 16:18:26,793: WARNING/ForkPoolWorker-1] sysop: mbms@张超
+[2021-07-13 16:18:26,793: WARNING/ForkPoolWorker-1] 
+
+[2021-07-13 16:18:26,793: WARNING/ForkPoolWorker-1] #################
+[2021-07-13 16:18:26,794: WARNING/ForkPoolWorker-1] 
+
+[2021-07-13 16:18:27,814: WARNING/ForkPoolWorker-1] !!!!!!!!!!!!!!!!!!!!!!
+[2021-07-13 16:18:27,814: WARNING/ForkPoolWorker-1] 
+
+[2021-07-13 16:18:27,814: WARNING/ForkPoolWorker-1] prod-prod-mbms
+[2021-07-13 16:18:27,815: WARNING/ForkPoolWorker-1] 
+
+[2021-07-13 16:18:27,815: WARNING/ForkPoolWorker-1] !!!!!!!!!!!!!!!!!!!!!!
+[2021-07-13 16:18:27,815: WARNING/ForkPoolWorker-1] 
+
+[2021-07-13 16:18:28,067: WARNING/ForkPoolWorker-1] !!!!!!!!!!!!!!!!!!!!!!
+[2021-07-13 16:18:28,068: WARNING/ForkPoolWorker-1] 
+
+[2021-07-13 16:18:28,068: WARNING/ForkPoolWorker-1] prodv5-prodv5-mbmsv5
+[2021-07-13 16:18:28,069: WARNING/ForkPoolWorker-1] 
+
+[2021-07-13 16:18:28,069: WARNING/ForkPoolWorker-1] !!!!!!!!!!!!!!!!!!!!!!
+[2021-07-13 16:18:28,069: WARNING/ForkPoolWorker-1] 
+
+[2021-07-13 16:18:28,315: WARNING/ForkPoolWorker-1] comleted the autocreate in jenkins
+[2021-07-13 16:18:28,315: WARNING/ForkPoolWorker-1] 
+
+[2021-07-13 16:18:28,589: INFO/ForkPoolWorker-1] Task svn.tasks.autoCreateJenkinsAuth[6fb93aa2-3def-4ead-9447-02affc42c869] succeeded in 3.4754380229860544s: 'comleted the autocreate in jenkins'
+[2021-07-13 16:56:27,612: INFO/MainProcess] Task svn.tasks.autoCreateJenkinsAuth[4f62f3aa-1143-47a7-a8ef-41333cbba7b3] received
+[2021-07-13 16:56:27,617: INFO/MainProcess] Task svn.tasks.autoRemoveJenkinsAuth[e3659ed0-1ef0-4ecf-99fe-582418fb922f] received
+[2021-07-13 16:56:34,662: WARNING/ForkPoolWorker-1] begin to create jenkins auth with:['zhihuixuanpin@薛伟军']
+[2021-07-13 16:56:34,665: WARNING/ForkPoolWorker-1] 
+
+[2021-07-13 16:56:34,666: WARNING/ForkPoolWorker-1] #################
+[2021-07-13 16:56:34,666: WARNING/ForkPoolWorker-1] 
+
+[2021-07-13 16:56:34,667: WARNING/ForkPoolWorker-1] sysop: zhihuixuanpin@薛伟军
+[2021-07-13 16:56:34,667: WARNING/ForkPoolWorker-1] 
+
+[2021-07-13 16:56:34,668: WARNING/ForkPoolWorker-1] #################
+[2021-07-13 16:56:34,668: WARNING/ForkPoolWorker-1] 
+
+[2021-07-13 16:56:35,833: WARNING/ForkPoolWorker-1] !!!!!!!!!!!!!!!!!!!!!!
+[2021-07-13 16:56:35,833: WARNING/ForkPoolWorker-1] 
+
+[2021-07-13 16:56:35,833: WARNING/ForkPoolWorker-1] prod-zhihuixuanpin
+[2021-07-13 16:56:35,833: WARNING/ForkPoolWorker-1] 
+
+[2021-07-13 16:56:35,834: WARNING/ForkPoolWorker-1] !!!!!!!!!!!!!!!!!!!!!!
+[2021-07-13 16:56:35,834: WARNING/ForkPoolWorker-1] 
+
+[2021-07-13 16:56:36,139: WARNING/ForkPoolWorker-1] comleted the autocreate in jenkins
+[2021-07-13 16:56:36,140: WARNING/ForkPoolWorker-1] 
+
+[2021-07-13 16:56:36,402: INFO/ForkPoolWorker-1] Task svn.tasks.autoCreateJenkinsAuth[4f62f3aa-1143-47a7-a8ef-41333cbba7b3] succeeded in 1.7487233523279428s: 'comleted the autocreate in jenkins'
+[2021-07-13 17:39:04,794: WARNING/ForkPoolWorker-1] begin to remove jenkins auth
+[2021-07-13 17:39:04,795: WARNING/ForkPoolWorker-1] 
+
+[2021-07-13 17:39:04,796: WARNING/ForkPoolWorker-1] #################
+[2021-07-13 17:39:04,796: WARNING/ForkPoolWorker-1] 
+
+[2021-07-13 17:39:04,796: WARNING/ForkPoolWorker-1] sysop: xcxsc_h5
+[2021-07-13 17:39:04,797: WARNING/ForkPoolWorker-1] 
+
+[2021-07-13 17:39:04,797: WARNING/ForkPoolWorker-1] #################
+[2021-07-13 17:39:04,797: WARNING/ForkPoolWorker-1] 
+
+[2021-07-13 17:39:04,803: ERROR/ForkPoolWorker-1] Task svn.tasks.autoRemoveJenkinsAuth[7d930de1-11bb-4a8f-9180-dfcc8a285f4a] raised unexpected: ValueError('not enough values to unpack (expected 2, got 1)',)
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.6/site-packages/celery/app/trace.py", line 450, in trace_task
+    R = retval = fun(*args, **kwargs)
+  File "/usr/local/lib/python3.6/site-packages/celery/app/trace.py", line 731, in __protected_call__
+    return self.run(*args, **kwargs)
+  File "/data/devops/svn/tasks.py", line 39, in autoRemoveJenkinsAuth
+    unsssignRole(sysops, target)
+  File "/data/devops/svn/jenkinsop.py", line 163, in unsssignRole
+    role, user, _, _ = getRoleAndPattern(sysop, target)
+  File "/data/devops/svn/jenkinsop.py", line 116, in getRoleAndPattern
+    service, user = sysop.split("@")
+ValueError: not enough values to unpack (expected 2, got 1)
+[2021-07-13 18:43:24,387: INFO/MainProcess] Task svn.tasks.autoCreateJenkinsAuth[90ea8626-80cf-4f81-8426-6c55aec0dbc0] received
+[2021-07-13 18:43:24,392: INFO/MainProcess] Task svn.tasks.autoRemoveJenkinsAuth[2c980d0c-46fc-4447-a7f0-e1bc1c2c3803] received
+[2021-07-13 18:43:31,444: WARNING/ForkPoolWorker-1] begin to create jenkins auth with:['zlsc', 'yunying@薛伟军', 'zlscms@印嘉伟', 'hlsc_uni', 'zlsczs_h5@王桂飞']
+[2021-07-13 18:43:31,446: WARNING/ForkPoolWorker-1] 
+
+[2021-07-13 18:43:31,446: WARNING/ForkPoolWorker-1] service entry is in wrong format
+[2021-07-13 18:43:31,446: WARNING/ForkPoolWorker-1] 
+
+[2021-07-13 18:43:31,447: WARNING/ForkPoolWorker-1] #################
+[2021-07-13 18:43:31,447: WARNING/ForkPoolWorker-1] 
+
+[2021-07-13 18:43:31,447: WARNING/ForkPoolWorker-1] sysop: zlsc
+[2021-07-13 18:43:31,448: WARNING/ForkPoolWorker-1] 
+
+[2021-07-13 18:43:31,448: WARNING/ForkPoolWorker-1] #################
+[2021-07-13 18:43:31,448: WARNING/ForkPoolWorker-1] 
+
+[2021-07-13 18:43:31,458: ERROR/ForkPoolWorker-1] Task svn.tasks.autoCreateJenkinsAuth[90ea8626-80cf-4f81-8426-6c55aec0dbc0] raised unexpected: ValueError('not enough values to unpack (expected 2, got 1)',)
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.6/site-packages/celery/app/trace.py", line 450, in trace_task
+    R = retval = fun(*args, **kwargs)
+  File "/usr/local/lib/python3.6/site-packages/celery/app/trace.py", line 731, in __protected_call__
+    return self.run(*args, **kwargs)
+  File "/data/devops/svn/tasks.py", line 29, in autoCreateJenkinsAuth
+    autoAuth(sysops, target, branch)
+  File "/data/devops/svn/jenkinsop.py", line 136, in autoAuth
+    role, user, service, pattern = getRoleAndPattern(sysop, target)
+  File "/data/devops/svn/jenkinsop.py", line 116, in getRoleAndPattern
+    service, user = sysop.split("@")
+ValueError: not enough values to unpack (expected 2, got 1)
+[2021-07-14 14:57:02,924: WARNING/ForkPoolWorker-1] begin to remove jenkins auth
+[2021-07-14 14:57:02,925: WARNING/ForkPoolWorker-1] 
+
+[2021-07-14 14:57:02,925: WARNING/ForkPoolWorker-1] #################
+[2021-07-14 14:57:02,926: WARNING/ForkPoolWorker-1] 
+
+[2021-07-14 14:57:02,927: WARNING/ForkPoolWorker-1] sysop: pays
+[2021-07-14 14:57:02,927: WARNING/ForkPoolWorker-1] 
+
+[2021-07-14 14:57:02,927: WARNING/ForkPoolWorker-1] #################
+[2021-07-14 14:57:02,928: WARNING/ForkPoolWorker-1] 
+
+[2021-07-14 14:57:02,935: ERROR/ForkPoolWorker-1] Task svn.tasks.autoRemoveJenkinsAuth[3d6f2634-5172-4bbb-9ec5-f5282b0ad5c2] raised unexpected: ValueError('not enough values to unpack (expected 2, got 1)',)
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.6/site-packages/celery/app/trace.py", line 450, in trace_task
+    R = retval = fun(*args, **kwargs)
+  File "/usr/local/lib/python3.6/site-packages/celery/app/trace.py", line 731, in __protected_call__
+    return self.run(*args, **kwargs)
+  File "/data/devops/svn/tasks.py", line 39, in autoRemoveJenkinsAuth
+    unsssignRole(sysops, target)
+  File "/data/devops/svn/jenkinsop.py", line 163, in unsssignRole
+    role, user, _, _ = getRoleAndPattern(sysop, target)
+  File "/data/devops/svn/jenkinsop.py", line 116, in getRoleAndPattern
+    service, user = sysop.split("@")
+ValueError: not enough values to unpack (expected 2, got 1)
+[2021-07-14 15:18:01,551: WARNING/ForkPoolWorker-1] begin to remove jenkins auth
+[2021-07-14 15:18:01,552: WARNING/ForkPoolWorker-1] 
+
+[2021-07-14 15:18:01,552: WARNING/ForkPoolWorker-1] #################
+[2021-07-14 15:18:01,552: WARNING/ForkPoolWorker-1] 
+
+[2021-07-14 15:18:01,553: WARNING/ForkPoolWorker-1] sysop: pays@张超
+[2021-07-14 15:18:01,553: WARNING/ForkPoolWorker-1] 
+
+[2021-07-14 15:18:01,553: WARNING/ForkPoolWorker-1] #################
+[2021-07-14 15:18:01,554: WARNING/ForkPoolWorker-1] 
+
+[2021-07-14 15:18:01,992: WARNING/ForkPoolWorker-1] comleted the removal of auth in jenkins
+[2021-07-14 15:18:01,992: WARNING/ForkPoolWorker-1] 
+
+[2021-07-14 15:18:01,993: WARNING/ForkPoolWorker-1] 2021-07-14 15:18:01.993108
+[2021-07-14 15:18:01,993: WARNING/ForkPoolWorker-1] 
+
+[2021-07-14 15:18:02,259: INFO/ForkPoolWorker-1] Task svn.tasks.autoRemoveJenkinsAuth[48f0f002-f593-4401-9fb8-0c46e43faf8a] succeeded in 0.7115423120558262s: 'comleted the removal of auth in jenkins'
+[2021-07-14 15:20:05,810: WARNING/ForkPoolWorker-1] begin to remove jenkins auth
+[2021-07-14 15:20:05,810: WARNING/ForkPoolWorker-1] 
+
+[2021-07-14 15:20:05,810: WARNING/ForkPoolWorker-1] #################
+[2021-07-14 15:20:05,811: WARNING/ForkPoolWorker-1] 
+
+[2021-07-14 15:20:05,811: WARNING/ForkPoolWorker-1] sysop: urms@张超
+[2021-07-14 15:20:05,811: WARNING/ForkPoolWorker-1] 
+
+[2021-07-14 15:20:05,812: WARNING/ForkPoolWorker-1] #################
+[2021-07-14 15:20:05,813: WARNING/ForkPoolWorker-1] 
+
+[2021-07-14 15:20:06,292: WARNING/ForkPoolWorker-1] comleted the removal of auth in jenkins
+[2021-07-14 15:20:06,292: WARNING/ForkPoolWorker-1] 
+
+[2021-07-14 15:20:06,293: WARNING/ForkPoolWorker-1] 2021-07-14 15:20:06.293115
+[2021-07-14 15:20:06,293: WARNING/ForkPoolWorker-1] 
+
+[2021-07-14 15:20:06,551: INFO/ForkPoolWorker-1] Task svn.tasks.autoRemoveJenkinsAuth[b6f6b5f1-4814-46f9-9085-ea013c868b08] succeeded in 0.7454281356185675s: 'comleted the removal of auth in jenkins'
+[2021-07-14 16:07:05,925: WARNING/ForkPoolWorker-1] begin to remove jenkins auth
+[2021-07-14 16:07:05,925: WARNING/ForkPoolWorker-1] 
+
+[2021-07-14 16:07:05,926: WARNING/ForkPoolWorker-1] #################
+[2021-07-14 16:07:05,926: WARNING/ForkPoolWorker-1] 
+
+[2021-07-14 16:07:05,927: WARNING/ForkPoolWorker-1] sysop: zhihuixuanpin@薛伟军
+[2021-07-14 16:07:05,928: WARNING/ForkPoolWorker-1] 
+
+[2021-07-14 16:07:05,928: WARNING/ForkPoolWorker-1] #################
+[2021-07-14 16:07:05,928: WARNING/ForkPoolWorker-1] 
+
+[2021-07-14 16:07:06,838: WARNING/ForkPoolWorker-1] comleted the removal of auth in jenkins
+[2021-07-14 16:07:06,838: WARNING/ForkPoolWorker-1] 
+
+[2021-07-14 16:07:06,838: WARNING/ForkPoolWorker-1] 2021-07-14 16:07:06.838911
+[2021-07-14 16:07:06,839: WARNING/ForkPoolWorker-1] 
+
+[2021-07-14 16:07:07,093: INFO/ForkPoolWorker-1] Task svn.tasks.autoRemoveJenkinsAuth[e3659ed0-1ef0-4ecf-99fe-582418fb922f] succeeded in 1.1742333211004734s: 'comleted the removal of auth in jenkins'
+[2021-07-14 16:16:05,134: WARNING/ForkPoolWorker-1] begin to remove jenkins auth
+[2021-07-14 16:16:05,135: WARNING/ForkPoolWorker-1] 
+
+[2021-07-14 16:16:05,136: WARNING/ForkPoolWorker-1] #################
+[2021-07-14 16:16:05,136: WARNING/ForkPoolWorker-1] 
+
+[2021-07-14 16:16:05,136: WARNING/ForkPoolWorker-1] sysop: oms@张超
+[2021-07-14 16:16:05,136: WARNING/ForkPoolWorker-1] 
+
+[2021-07-14 16:16:05,137: WARNING/ForkPoolWorker-1] #################
+[2021-07-14 16:16:05,137: WARNING/ForkPoolWorker-1] 
+
+[2021-07-14 16:16:05,606: WARNING/ForkPoolWorker-1] #################
+[2021-07-14 16:16:05,608: WARNING/ForkPoolWorker-1] 
+
+[2021-07-14 16:16:05,609: WARNING/ForkPoolWorker-1] sysop: mbms@张超
+[2021-07-14 16:16:05,609: WARNING/ForkPoolWorker-1] 
+
+[2021-07-14 16:16:05,609: WARNING/ForkPoolWorker-1] #################
+[2021-07-14 16:16:05,610: WARNING/ForkPoolWorker-1] 
+
+[2021-07-14 16:16:06,028: WARNING/ForkPoolWorker-1] comleted the removal of auth in jenkins
+[2021-07-14 16:16:06,029: WARNING/ForkPoolWorker-1] 
+
+[2021-07-14 16:16:06,029: WARNING/ForkPoolWorker-1] 2021-07-14 16:16:06.029579
+[2021-07-14 16:16:06,029: WARNING/ForkPoolWorker-1] 
+
+[2021-07-14 16:16:06,272: INFO/ForkPoolWorker-1] Task svn.tasks.autoRemoveJenkinsAuth[81357962-30d6-4d3c-a2a6-d920c994bd3b] succeeded in 1.1416326835751534s: 'comleted the removal of auth in jenkins'
+[2021-07-14 17:37:55,218: INFO/MainProcess] Task svn.tasks.autoCreateJenkinsAuth[6672150a-77fc-4ca4-b856-3d6a1ad0a93a] received
+[2021-07-14 17:37:55,222: INFO/MainProcess] Task svn.tasks.autoRemoveJenkinsAuth[f70e4b69-1faf-46ac-a90c-10758dd03035] received
+[2021-07-14 17:38:02,364: WARNING/ForkPoolWorker-1] begin to create jenkins auth with:['stablepos_android']
+[2021-07-14 17:38:02,366: WARNING/ForkPoolWorker-1] 
+
+[2021-07-14 17:38:02,367: WARNING/ForkPoolWorker-1] service entry is in wrong format
+[2021-07-14 17:38:02,367: WARNING/ForkPoolWorker-1] 
+
+[2021-07-14 17:38:02,368: WARNING/ForkPoolWorker-1] #################
+[2021-07-14 17:38:02,369: WARNING/ForkPoolWorker-1] 
+
+[2021-07-14 17:38:02,369: WARNING/ForkPoolWorker-1] sysop: stablepos_android
+[2021-07-14 17:38:02,370: WARNING/ForkPoolWorker-1] 
+
+[2021-07-14 17:38:02,376: WARNING/ForkPoolWorker-1] #################
+[2021-07-14 17:38:02,377: WARNING/ForkPoolWorker-1] 
+
+[2021-07-14 17:38:02,397: ERROR/ForkPoolWorker-1] Task svn.tasks.autoCreateJenkinsAuth[6672150a-77fc-4ca4-b856-3d6a1ad0a93a] raised unexpected: ValueError('not enough values to unpack (expected 2, got 1)',)
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.6/site-packages/celery/app/trace.py", line 450, in trace_task
+    R = retval = fun(*args, **kwargs)
+  File "/usr/local/lib/python3.6/site-packages/celery/app/trace.py", line 731, in __protected_call__
+    return self.run(*args, **kwargs)
+  File "/data/devops/svn/tasks.py", line 29, in autoCreateJenkinsAuth
+    autoAuth(sysops, target, branch)
+  File "/data/devops/svn/jenkinsop.py", line 136, in autoAuth
+    role, user, service, pattern = getRoleAndPattern(sysop, target)
+  File "/data/devops/svn/jenkinsop.py", line 116, in getRoleAndPattern
+    service, user = sysop.split("@")
+ValueError: not enough values to unpack (expected 2, got 1)
+[2021-07-14 17:48:17,116: INFO/MainProcess] Task svn.tasks.autoCreateJenkinsAuth[e66851e5-852e-4c7f-8404-70152de20434] received
+[2021-07-14 17:48:17,119: INFO/MainProcess] Task svn.tasks.autoRemoveJenkinsAuth[3dc649f4-5382-4d5a-a9bb-36ece7627505] received
+[2021-07-14 17:48:19,611: WARNING/ForkPoolWorker-1] begin to create jenkins auth with:['stablepos_android']
+[2021-07-14 17:48:19,612: WARNING/ForkPoolWorker-1] 
+
+[2021-07-14 17:48:19,613: WARNING/ForkPoolWorker-1] service entry is in wrong format
+[2021-07-14 17:48:19,613: WARNING/ForkPoolWorker-1] 
+
+[2021-07-14 17:48:19,614: WARNING/ForkPoolWorker-1] #################
+[2021-07-14 17:48:19,614: WARNING/ForkPoolWorker-1] 
+
+[2021-07-14 17:48:19,614: WARNING/ForkPoolWorker-1] sysop: stablepos_android
+[2021-07-14 17:48:19,615: WARNING/ForkPoolWorker-1] 
+
+[2021-07-14 17:48:19,615: WARNING/ForkPoolWorker-1] #################
+[2021-07-14 17:48:19,615: WARNING/ForkPoolWorker-1] 
+
+[2021-07-14 17:48:19,621: ERROR/ForkPoolWorker-1] Task svn.tasks.autoCreateJenkinsAuth[e66851e5-852e-4c7f-8404-70152de20434] raised unexpected: ValueError('not enough values to unpack (expected 2, got 1)',)
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.6/site-packages/celery/app/trace.py", line 450, in trace_task
+    R = retval = fun(*args, **kwargs)
+  File "/usr/local/lib/python3.6/site-packages/celery/app/trace.py", line 731, in __protected_call__
+    return self.run(*args, **kwargs)
+  File "/data/devops/svn/tasks.py", line 29, in autoCreateJenkinsAuth
+    autoAuth(sysops, target, branch)
+  File "/data/devops/svn/jenkinsop.py", line 136, in autoAuth
+    role, user, service, pattern = getRoleAndPattern(sysop, target)
+  File "/data/devops/svn/jenkinsop.py", line 116, in getRoleAndPattern
+    service, user = sysop.split("@")
+ValueError: not enough values to unpack (expected 2, got 1)
+[2021-07-14 18:40:07,160: WARNING/ForkPoolWorker-1] begin to remove jenkins auth
+[2021-07-14 18:40:07,161: WARNING/ForkPoolWorker-1] 
+
+[2021-07-14 18:40:07,161: WARNING/ForkPoolWorker-1] #################
+[2021-07-14 18:40:07,161: WARNING/ForkPoolWorker-1] 
+
+[2021-07-14 18:40:07,161: WARNING/ForkPoolWorker-1] sysop: zlsc
+[2021-07-14 18:40:07,162: WARNING/ForkPoolWorker-1] 
+
+[2021-07-14 18:40:07,162: WARNING/ForkPoolWorker-1] #################
+[2021-07-14 18:40:07,162: WARNING/ForkPoolWorker-1] 
+
+[2021-07-14 18:40:07,166: ERROR/ForkPoolWorker-1] Task svn.tasks.autoRemoveJenkinsAuth[2c980d0c-46fc-4447-a7f0-e1bc1c2c3803] raised unexpected: ValueError('not enough values to unpack (expected 2, got 1)',)
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.6/site-packages/celery/app/trace.py", line 450, in trace_task
+    R = retval = fun(*args, **kwargs)
+  File "/usr/local/lib/python3.6/site-packages/celery/app/trace.py", line 731, in __protected_call__
+    return self.run(*args, **kwargs)
+  File "/data/devops/svn/tasks.py", line 39, in autoRemoveJenkinsAuth
+    unsssignRole(sysops, target)
+  File "/data/devops/svn/jenkinsop.py", line 163, in unsssignRole
+    role, user, _, _ = getRoleAndPattern(sysop, target)
+  File "/data/devops/svn/jenkinsop.py", line 116, in getRoleAndPattern
+    service, user = sysop.split("@")
+ValueError: not enough values to unpack (expected 2, got 1)
+[2021-07-15 15:00:04,159: WARNING/ForkPoolWorker-1] begin to remove jenkins auth
+[2021-07-15 15:00:04,160: WARNING/ForkPoolWorker-1] 
+
+[2021-07-15 15:00:04,160: WARNING/ForkPoolWorker-1] #################
+[2021-07-15 15:00:04,160: WARNING/ForkPoolWorker-1] 
+
+[2021-07-15 15:00:04,161: WARNING/ForkPoolWorker-1] sysop: stablepos_android
+[2021-07-15 15:00:04,161: WARNING/ForkPoolWorker-1] 
+
+[2021-07-15 15:00:04,161: WARNING/ForkPoolWorker-1] #################
+[2021-07-15 15:00:04,162: WARNING/ForkPoolWorker-1] 
+
+[2021-07-15 15:00:04,167: ERROR/ForkPoolWorker-1] Task svn.tasks.autoRemoveJenkinsAuth[f70e4b69-1faf-46ac-a90c-10758dd03035] raised unexpected: ValueError('not enough values to unpack (expected 2, got 1)',)
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.6/site-packages/celery/app/trace.py", line 450, in trace_task
+    R = retval = fun(*args, **kwargs)
+  File "/usr/local/lib/python3.6/site-packages/celery/app/trace.py", line 731, in __protected_call__
+    return self.run(*args, **kwargs)
+  File "/data/devops/svn/tasks.py", line 39, in autoRemoveJenkinsAuth
+    unsssignRole(sysops, target)
+  File "/data/devops/svn/jenkinsop.py", line 163, in unsssignRole
+    role, user, _, _ = getRoleAndPattern(sysop, target)
+  File "/data/devops/svn/jenkinsop.py", line 116, in getRoleAndPattern
+    service, user = sysop.split("@")
+ValueError: not enough values to unpack (expected 2, got 1)
+
+worker: Warm shutdown (MainProcess)
+[2021-07-15 17:23:44] DEBUG:asyncio: Using selector: EpollSelector selector_events.py:54
+hello
+ 
+ -------------- celery@svn v5.1.1 (sun-harmonics)
+--- ***** ----- 
+-- ******* ---- Linux-3.10.0-1127.13.1.el7.x86_64-x86_64-with-centos-7.8.2003-Core 2021-07-15 17:23:45
+- *** --- * --- 
+- ** ---------- [config]
+- ** ---------- .> app:         devops:0x7fe4dc1adda0
+- ** ---------- .> transport:   amqp://guest:**@192.168.2.253:5672//
+- ** ---------- .> results:     redis://192.168.2.253/
+- *** --- * --- .> concurrency: 4 (prefork)
+-- ******* ---- .> task events: OFF (enable -E to monitor tasks in this worker)
+--- ***** ----- 
+ -------------- [queues]
+                .> celery           exchange=celery(direct) key=celery
+                
+
+[tasks]
+  . svn.tasks.add
+  . svn.tasks.autoCreateJenkinsAuth
+  . svn.tasks.autoRemoveJenkinsAuth
+
+/usr/local/lib/python3.6/site-packages/celery/platforms.py:835: SecurityWarning: You're running the worker with superuser privileges: this is
+absolutely not recommended!
+
+Please specify a different user using the --uid option.
+
+User information: uid=0 euid=0 gid=0 egid=0
+
+  uid=uid, euid=euid, gid=gid, egid=egid,
+[2021-07-15 17:23:46,783: INFO/MainProcess] Connected to amqp://guest:**@192.168.2.253:5672//
+[2021-07-15 17:23:46,842: INFO/MainProcess] mingle: searching for neighbors
+[2021-07-15 17:23:47,937: INFO/MainProcess] mingle: all alone
+[2021-07-15 17:23:48,019: WARNING/MainProcess] /usr/local/lib/python3.6/site-packages/celery/fixups/django.py:204: UserWarning: Using settings.DEBUG leads to a memory
+            leak, never use this setting in production environments!
+  leak, never use this setting in production environments!''')
+
+[2021-07-15 17:23:48,019: INFO/MainProcess] celery@svn ready.
+[2021-07-15 17:23:48,475: INFO/MainProcess] Task svn.tasks.autoRemoveJenkinsAuth[3dc649f4-5382-4d5a-a9bb-36ece7627505] received
+[2021-07-15 17:23:52,962: INFO/MainProcess] Events of group {task} enabled by remote.
+/usr/local/lib/python3.6/site-packages/celery/platforms.py:835: SecurityWarning: You're running the worker with superuser privileges: this is
+absolutely not recommended!
+
+Please specify a different user using the --uid option.
+
+User information: uid=0 euid=0 gid=0 egid=0
+
+  uid=uid, euid=euid, gid=gid, egid=egid,
+[2021-07-15 18:00:02,807: WARNING/ForkPoolWorker-1] begin to remove jenkins auth
+[2021-07-15 18:00:02,808: WARNING/ForkPoolWorker-1] 
+
+[2021-07-15 18:00:02,809: WARNING/ForkPoolWorker-1] #################
+[2021-07-15 18:00:02,809: WARNING/ForkPoolWorker-1] 
+
+[2021-07-15 18:00:02,810: WARNING/ForkPoolWorker-1] sysop: stablepos_android
+[2021-07-15 18:00:02,810: WARNING/ForkPoolWorker-1] 
+
+[2021-07-15 18:00:02,810: WARNING/ForkPoolWorker-1] #################
+[2021-07-15 18:00:02,810: WARNING/ForkPoolWorker-1] 
+
+[2021-07-15 18:00:02,946: ERROR/ForkPoolWorker-1] Task svn.tasks.autoRemoveJenkinsAuth[3dc649f4-5382-4d5a-a9bb-36ece7627505] raised unexpected: ValueError('not enough values to unpack (expected 2, got 1)',)
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.6/site-packages/celery/app/trace.py", line 450, in trace_task
+    R = retval = fun(*args, **kwargs)
+  File "/usr/local/lib/python3.6/site-packages/celery/app/trace.py", line 731, in __protected_call__
+    return self.run(*args, **kwargs)
+  File "/data/devops/svn/tasks.py", line 39, in autoRemoveJenkinsAuth
+    unsssignRole(sysops, target)
+  File "/data/devops/svn/jenkinsop.py", line 170, in unsssignRole
+    role, user, _, _ = getRoleAndPattern(sysop, target)
+  File "/data/devops/svn/jenkinsop.py", line 123, in getRoleAndPattern
+    service, user = sysop.split("@")
+ValueError: not enough values to unpack (expected 2, got 1)
+[2021-07-15 18:05:52,481: INFO/MainProcess] Task svn.tasks.autoCreateJenkinsAuth[d66f96dd-fd86-4c79-b57a-58d43c3f8b4d] received
+[2021-07-15 18:05:52,483: INFO/MainProcess] Task svn.tasks.autoRemoveJenkinsAuth[98149cc4-f452-4aaf-a060-f45b26909a86] received
+[2021-07-15 18:05:55,541: WARNING/ForkPoolWorker-1] begin to create jenkins auth with:['stablepos_h5']
+[2021-07-15 18:05:55,542: WARNING/ForkPoolWorker-1] 
+
+[2021-07-15 18:05:55,542: WARNING/ForkPoolWorker-1] service entry is in wrong format
+[2021-07-15 18:05:55,542: WARNING/ForkPoolWorker-1] 
+
+[2021-07-15 18:05:55,542: WARNING/ForkPoolWorker-1] #################
+[2021-07-15 18:05:55,542: WARNING/ForkPoolWorker-1] 
+
+[2021-07-15 18:05:55,543: WARNING/ForkPoolWorker-1] sysop: stablepos_h5
+[2021-07-15 18:05:55,543: WARNING/ForkPoolWorker-1] 
+
+[2021-07-15 18:05:55,543: WARNING/ForkPoolWorker-1] #################
+[2021-07-15 18:05:55,543: WARNING/ForkPoolWorker-1] 
+
+[2021-07-15 18:05:55,547: ERROR/ForkPoolWorker-1] Task svn.tasks.autoCreateJenkinsAuth[d66f96dd-fd86-4c79-b57a-58d43c3f8b4d] raised unexpected: ValueError('not enough values to unpack (expected 2, got 1)',)
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.6/site-packages/celery/app/trace.py", line 450, in trace_task
+    R = retval = fun(*args, **kwargs)
+  File "/usr/local/lib/python3.6/site-packages/celery/app/trace.py", line 731, in __protected_call__
+    return self.run(*args, **kwargs)
+  File "/data/devops/svn/tasks.py", line 29, in autoCreateJenkinsAuth
+    autoAuth(sysops, target, branch)
+  File "/data/devops/svn/jenkinsop.py", line 144, in autoAuth
+    role, user, service, pattern = getRoleAndPattern(sysop, target)
+  File "/data/devops/svn/jenkinsop.py", line 123, in getRoleAndPattern
+    service, user = sysop.split("@")
+ValueError: not enough values to unpack (expected 2, got 1)
+[2021-07-15 19:13:03,575: INFO/MainProcess] Task svn.tasks.autoCreateJenkinsAuth[325b3436-d8d2-474b-8bc6-d2879180ff71] received
+[2021-07-15 19:13:03,579: INFO/MainProcess] Task svn.tasks.autoRemoveJenkinsAuth[62ae4fac-7cf0-4ee0-a860-ce273decda25] received
+[2021-07-15 19:13:10,808: WARNING/ForkPoolWorker-1] begin to create jenkins auth with:['zlscms']
+[2021-07-15 19:13:10,808: WARNING/ForkPoolWorker-1] 
+
+[2021-07-15 19:13:10,811: WARNING/ForkPoolWorker-1] service entry is in wrong format
+[2021-07-15 19:13:10,811: WARNING/ForkPoolWorker-1] 
+
+[2021-07-15 19:13:10,812: WARNING/ForkPoolWorker-1] #################
+[2021-07-15 19:13:10,813: WARNING/ForkPoolWorker-1] 
+
+[2021-07-15 19:13:10,813: WARNING/ForkPoolWorker-1] sysop: zlscms
+[2021-07-15 19:13:10,813: WARNING/ForkPoolWorker-1] 
+
+[2021-07-15 19:13:10,814: WARNING/ForkPoolWorker-1] #################
+[2021-07-15 19:13:10,814: WARNING/ForkPoolWorker-1] 
+
+[2021-07-15 19:13:10,819: ERROR/ForkPoolWorker-1] Task svn.tasks.autoCreateJenkinsAuth[325b3436-d8d2-474b-8bc6-d2879180ff71] raised unexpected: ValueError('not enough values to unpack (expected 2, got 1)',)
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.6/site-packages/celery/app/trace.py", line 450, in trace_task
+    R = retval = fun(*args, **kwargs)
+  File "/usr/local/lib/python3.6/site-packages/celery/app/trace.py", line 731, in __protected_call__
+    return self.run(*args, **kwargs)
+  File "/data/devops/svn/tasks.py", line 29, in autoCreateJenkinsAuth
+    autoAuth(sysops, target, branch)
+  File "/data/devops/svn/jenkinsop.py", line 144, in autoAuth
+    role, user, service, pattern = getRoleAndPattern(sysop, target)
+  File "/data/devops/svn/jenkinsop.py", line 123, in getRoleAndPattern
+    service, user = sysop.split("@")
+ValueError: not enough values to unpack (expected 2, got 1)
