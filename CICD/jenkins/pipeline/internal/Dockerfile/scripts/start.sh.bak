@@ -1,0 +1,10 @@
+#!/usr/bin/bash
+JVMS="-server -Xms1g   -Xmx2g -Xmn256m -Xss256k -XX:MetaspaceSize=200m -XX:MaxMetaspaceSize=256m \
+-XX:+UseConcMarkSweepGC -XX:+UseParNewGC -XX:+CMSClassUnloadingEnabled -XX:+DisableExplicitGC \
+-XX:+UseCMSInitiatingOccupancyOnly -XX:CMSInitiatingOccupancyFraction=68 -verbose:gc -XX:+PrintGCDetails -XX:+PrintGCDateStamps \
+-Ddubbo.registry.file=/data/.dubbo/dubbo-registry-$(date +%Y%m%d-%H%M%S).cache \
+-Djava.awt.headless=true -Djava.net.preferIPv4Stack=true -Ddubbo.shutdown.hook=true"
+tmplogname=${PRO_NAME}-${SV_ENV}-$(date +%s%N |md5sum | cut -c 1-10).txt
+echo ${tmplogname} >> /data/tmplogs/${SV_NAME}-${SV_ENV}.txt
+java  ${JVMS}  -jar $JAR | tee /data/tmplogs/${tmplogname}
+

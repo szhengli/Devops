@@ -1,0 +1,47 @@
+base:
+- fpv5-web
+- jobmsv5-admin
+- jobmsv5-web
+- fmsv5-web
+- smsv5-admin
+- smsv5-web
+- wsmsv5-admin
+- mcmsv5-web
+- umsv5-web
+- zkmsv5
+- fpapiv5
+cpu: 250m
+front:
+- actsv5-admin
+- actsv5-web
+- posmsv5-admin
+- posmsv5-web
+- opmsv5-web
+- chmsv5-web
+- basicv5-web
+image-name: ""
+memory: 1500Mi
+middle:
+- omsv5-admin
+- omsv5-web
+- dcmsv5-admin
+- dcmsv5-web
+- mbmsv5-admin
+- mbmsv5-web
+- dwmsv5
+- urmsv5-admin
+- urmsv5-web
+- stmsv5-admin
+- stmsv5-web
+- paysv5-admin
+- paysv5-web
+- salemsv5-admin
+- salemsv5-web
+- accmsv5-admin
+- accmsv5-web
+- entryv5-web
+name: ""
+namespace: ""
+replica: 1
+vipcpu: 50m
+vipmemory: 512Mi

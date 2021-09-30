@@ -1,0 +1,20 @@
+apiVersion: tekton.dev/v1beta1
+kind: TaskRun
+metadata:
+  name: svn-clone
+spec:
+  serviceAccountName: alregsa
+  taskRef:
+    name: svn-clone
+  params:
+    - name: branch
+      value: "20201214"
+    - name: service
+      value: salems
+    - name: env
+      value: uat
+  workspaces:
+  - name: mavenCache
+    persistentVolumeClaim:
+      claimName: mavencache
+

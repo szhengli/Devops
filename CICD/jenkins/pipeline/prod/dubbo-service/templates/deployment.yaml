@@ -1,0 +1,143 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.name }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: {{ .Values.name }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Values.name  }}  
+  replicas: {{ .Values.replics }}
+  {{- if  .Values.namespace | regexMatch "prod|prodv5"  }} 
+  strategy:
+    rollingUpdate:
+      maxSurge: 60%
+      maxUnavailable: 0
+    type: RollingUpdate
+  {{- else }}
+  strategy:
+    rollingUpdate:
+      maxSurge: 50%
+      maxUnavailable: 50%
+    type: RollingUpdate
+  {{- end }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.name }}
+        {{- if  .Values.namespace | regexMatch "prodv5|vipv5"  }} 
+        {{- if has .Values.name .Values.front }}
+        zone: front
+        {{- else if has .Values.name .Values.middle }}
+        zone: middle
+        {{- else }}
+        zone: base
+        {{- end }}
+        {{- end }}
+    spec:
+      terminationGracePeriodSeconds: 10
+      {{- if  .Values.name | regexMatch "dwms|dwmsv5"  }}
+         {{- if  .Values.namespace | regexMatch "prod|prodv5"  }}
+            {{- include "dwms.hosts.prod" .  | indent 6 }}
+         {{- else  }}
+            {{- include "dwms.hosts.test" .  | indent 6 }}
+         {{- end  }}
+      {{- end }}
+      containers:
+      - name: {{ .Values.name }}
+        image: {{ .Values.imagename }}
+        volumeMounts:
+        - name: app-dump
+          mountPath: /dump
+        - mountPath: /data/app-logs
+          name: app-logs        
+        env:
+        - name: ENV
+          value: {{ .Values.namespace }}
+        {{- if eq .Values.namespace "prod" }}
+          {{- include "prod.logs" . | indent 8 }}
+        {{- else if eq .Values.namespace "prodv5" }}
+          {{- include "prodv5.logs" . | indent 8 }}
+        {{- else }}
+          {{- include "vipv5.logs" . | indent 8 }}
+        {{- end }}
+        {{- if .Values.namespace | regexMatch "prod|prodv5" }}
+        resources:
+          requests:
+            cpu: {{ .Values.cpu | quote }}
+            memory: {{ .Values.memory |quote }}
+          limits:
+            cpu: 2
+            memory: 3300Mi
+        {{- else }}
+        resources:
+          requests:
+            cpu: {{ .Values.vipcpu | quote }}
+            memory: {{ .Values.vipmemory |quote }}
+          limits:
+            cpu: 1
+            memory: 1Gi
+        {{- end }}
+        readinessProbe:
+          exec:
+            command: ["readiness.sh"]
+          initialDelaySeconds: 2
+          periodSeconds: 3
+          timeoutSeconds: 2
+          failureThreshold: 2
+        livenessProbe:
+          exec:
+            command: ["liveness.sh"]
+          initialDelaySeconds: 2
+          periodSeconds: 8
+          failureThreshold: 1
+          timeoutSeconds: 7
+        startupProbe:
+          exec:
+            command: ["startup.sh"]
+          initialDelaySeconds: 15
+          periodSeconds: 3
+          timeoutSeconds: 2
+          failureThreshold: 100
+      {{- if and (eq .Values.namespace "prod") (.Values.name | regexMatch "mrms-web") }}
+      nodeSelector:
+        isopool: isolationpool
+      tolerations:
+      - key: "iso"
+        operator: "Equal"
+        value: "isopool"
+        effect: "NoSchedule"
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - {key: app, operator: In, values: [{{ .Values.name }}]}
+            topologyKey: kubernetes.io/hostname
+      {{- else }}
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - preference:
+              matchExpressions:
+              - {key: defpool, operator: In, values: ["defaultpool"]}
+            weight: 60
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - {key: app, operator: In, values: [{{ .Values.name }}]}
+            topologyKey: kubernetes.io/hostname
+      {{- end }}
+      volumes:
+      - name: app-dump
+        persistentVolumeClaim:
+          claimName: {{ .Values.namespace }}-data
+      - name: app-logs
+        emptyDir: {}
+---
+{{- if .Values.namespace | regexMatch "prod|prodv5|vipv5" }}
+  {{- include "hpa" . }}
+{{- end }}

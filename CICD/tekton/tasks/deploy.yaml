@@ -1,0 +1,17 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: deploy-to-k8s
+spec:
+  resources:
+    inputs:
+    - name: image
+      type: image
+  steps:
+    - name: deploy-to-k8s
+      image: registry-vpc.cn-shanghai.aliyuncs.com/zhonglun/helm-kubectl-docker:v1.18.12-v3.4.1
+      script: |
+        #!/bin/sh
+        kubectl create deployment simplejava --image="$1"
+      args:
+       - "$(resources.inputs.image.url):v1"

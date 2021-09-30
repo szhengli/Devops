@@ -1,0 +1,66 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: zl-pipeline
+spec:
+  resources:
+  - name: alireg
+    type: image
+  params:
+    - name: branch
+      type: string
+    - name: service
+      type: string
+    - name: env
+      type: string
+  workspaces:
+    - name: workspace
+    - name: mavencache
+    - name: dockerfile
+    - name: scripts
+  tasks:
+    - name: svn-clone
+      taskRef:
+        name: svn-clone
+      params:
+        - name: branch
+          value: "$(params.branch)"
+        - name: service
+          value: "$(params.service)"
+        - name: env
+          value: "$(params.env)"
+      workspaces:
+        - name: workspace
+          workspace: workspace
+        - name: mavencache
+          workspace: mavencache
+        - name: scripts
+          workspace: scripts
+    - name: make-web-image
+      taskRef:
+        name: make-web-image
+      params:
+        - name: revision
+          value: "$(tasks.svn-clone.results.revision)"
+        - name: service
+          value: "$(params.service)"
+      resources:
+        outputs:
+        - name: alireg
+          resource: alireg   
+      workspaces:
+        - name: workspace
+          workspace: workspace
+        - name: dockerfile
+          workspace: dockerfile
+  finally: 
+    - name: cleanup
+      taskRef:
+        name: cleanup
+      params:
+        - name: service 
+          value: "$(params.service)"
+      workspaces:
+        - name: workspace
+          workspace: workspace
+
