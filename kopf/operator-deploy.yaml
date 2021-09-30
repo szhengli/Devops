@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: evc-operator
+spec:
+  replicas: 2
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      application: evc-operator
+  template:
+    metadata:
+      labels:
+        application: evc-operator
+    spec:
+      serviceAccountName: evc-account
+      containers:
+      - name: evc-operator
+        image: harbor.cnzhonglunnet.com/demo/operator:v1.2

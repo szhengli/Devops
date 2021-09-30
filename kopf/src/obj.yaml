@@ -1,0 +1,6 @@
+apiVersion: kopf.dev/v1
+kind: EphemeralVolumeClaim
+metadata:
+  name: zhang-claim
+spec:
+  size: 15G
