@@ -1,0 +1,434 @@
+<template>
+
+	
+	<div class="block">
+		<div style="text-align: center;font-size: large;" > <font size="5" > 收银机发布参数填写单</font> </div> <br>
+
+<el-form ref="form" :model="form" :rules="options.rules" label-width="110px" label-position="left" size="small"  style="width: 50%; width: 980px; margin: 0 auto; top: ; left: 50%; ">
+
+  <el-form-item label="发布环境" prop="releaseEnv">
+    <el-input v-model="form.releaseEnv" placeholder="发布环境" style="width: 30%;"></el-input>
+  </el-form-item>
+  
+    <el-form-item label="版本" prop="version">
+		<el-select v-model="form.version" placeholder="请选择" v-on:change="show_version">
+		 	         <el-option
+		 	           v-for="item in options.version"
+		 	           :key="item.value"
+		 	           :label="item.label"
+		 	           :value="item.value">
+		 	         </el-option>
+		 	       </el-select>
+		</el-form-item>
+	</el-form-item>
+  
+  <el-form-item label=" 细分选择" >
+   <el-cascader   placeholder="细分选择"  v-model="form.industries"
+          						:options="options.options"
+          						:props="options.props"
+          						collapse-tags
+								 :key="options.iscascaderShow"
+          						clearable  style="width: 30%;">
+          			  </el-cascader>
+  </el-form-item>
+  
+
+  
+		<el-form-item label="主屏svn地址">
+		  <el-input v-model="form.h5PrimaryScreen" placeholder="h5主屏svn地址"></el-input>
+		</el-form-item>
+		<el-form-item label="副屏svn地址">
+		  <el-input v-model="form.h5SecondaryScreen" placeholder="h5副屏svn地址"></el-input>
+		</el-form-item>
+ 
+      <el-tabs v-model="options.activeName" type="card" @tab-click="handleClick">
+        <el-tab-pane label="Android" name="android">
+			<el-form-item label="svn地址">
+			  <el-input v-model="form.android.svnAddress" placeholder="svn地址"></el-input>
+			</el-form-item>
+			
+			<el-form-item label="版本号">
+			  <el-input v-model="form.android.versionNumber" placeholder="版本号"></el-input>
+			</el-form-item>
+			 
+			<el-form-item label="热更版本">
+			  <el-input v-model="form.android.hotUpgradeVersion" placeholder="热更版本"></el-input>
+			</el-form-item>
+			
+			<el-form-item label="发布方式">
+			 <el-select v-model="form.android.releaseMethod" placeholder="请选择">
+			 	         <el-option
+			 	           v-for="item in options.androidReleaseMethods"
+			 	           :key="item.value"
+			 	           :label="item.label"
+			 	           :value="item.value">
+			 	         </el-option>
+			 	       </el-select>
+			</el-form-item>
+			
+			<el-form-item label="强制升级">
+			  <el-radio-group v-model="form.android.forceUpgrade">
+			    <el-radio label="1">是</el-radio>
+			    <el-radio label="0">否</el-radio>
+			  </el-radio-group>
+			</el-form-item>
+			
+			<el-form-item label="定向发布">
+			  <el-radio-group v-model="form.android.targetRelease">
+			    <el-radio label="1">是</el-radio>
+			    <el-radio label="0">否</el-radio>
+			  </el-radio-group>
+			</el-form-item>
+			
+	    </el-tab-pane>
+        <el-tab-pane label="Windows" name="windows">
+			<el-form-item label="svn地址">
+			  <el-input v-model="form.windows.svnAddress" placeholder="svn地址"></el-input>
+			</el-form-item>
+			<el-form-item label="版本号">
+			  <el-input v-model="form.windows.versionNumber" placeholder="版本号"></el-input>
+			</el-form-item>
+			
+			
+			<el-form-item label="发布方式">
+			 <el-select v-model="form.windows.releaseMethod" placeholder="请选择">
+			 	         <el-option
+			 	           v-for="item in options.windowsReleaseMethods"
+			 	           :key="item.value"
+			 	           :label="item.label"
+			 	           :value="item.value">
+			 	         </el-option>
+			 	       </el-select>
+			</el-form-item>
+			
+			<el-form-item label="强制升级">
+			  <el-radio-group v-model="form.windows.forceUpgrade">
+			    <el-radio label="1">是</el-radio>
+			    <el-radio label="0">否</el-radio>
+			  </el-radio-group>
+			</el-form-item>
+			
+			<el-form-item label="定向发布">
+			  <el-radio-group v-model="form.windows.targetRelease">
+			    <el-radio label="1">是</el-radio>
+			    <el-radio label="0">否</el-radio>
+			  </el-radio-group>
+			</el-form-item>
+			<el-form-item label="忽略版本">
+			  <el-radio-group v-model="form.windows.ignoreVersion">
+			    <el-radio label="1">是</el-radio>
+			    <el-radio label="0">否</el-radio>
+			  </el-radio-group>
+			</el-form-item>
+		</el-tab-pane>
+      </el-tabs>
+  <el-form-item label="计划发布时间" prop="releaseTime">
+      <el-date-picker
+        v-model="form.releaseTime"
+        type="datetime"
+		format="yyyy-MM-dd HH:mm:ss"
+		value-format="yyyy-MM-dd HH:mm:ss"
+        placeholder="选择日期时间">
+      </el-date-picker>
+    </el-form-item>
+  <el-form-item label="升级日志">
+    <el-input type="textarea"  v-model="form.upgradeLog" placeholder="升级日志"></el-input>
+  </el-form-item>
+
+  <el-form-item>
+    <el-button type="primary" @click="onSubmit2">立即创建</el-button>
+    <el-button>取消</el-button>
+  </el-form-item>
+</el-form>
+
+	</div>
+
+</template>
+
+
+
+<script>
+  export default {
+	mounted(){
+	  			  this.axios
+	  			  .get('/api/demo/take/')
+	  			  .then(response => {
+	  			  			//console.log(response.data);
+								//console.log(response.data.tongyongYXLAndroidV5[0].value)
+						    console.log(response.data)
+			 				this.options.oldVersion =  [{
+									value: {"subversion": "zhonglunOldVersion" },
+									label: '中仑老版',
+									children: [ {
+									  value: {"os": "Windows"},
+									  label: 'Windows',
+									  children: response.data.oldWindows,
+									}]
+								  }, {
+									value: {"subversion": "OemOldVersion" },
+									label: 'OEM老版',
+									children: [{
+									  value: {"os": "Android"},
+									  label: 'Android',
+									  children: response.data.oldOEMAndroid,
+									}, {
+									  value: {"os": "Windows"},
+									  label: 'Windows',
+									  children: response.data.oldOEMWindows,
+										}]
+								}];
+							
+							
+							this.options.newVersion = [{
+								value: {"subversion": "zhonglunNewVersion"},
+								label: '中仑新版',
+								children: [{
+								  value:  {"os": "Android"},
+								  label: 'Android',
+								  children: response.data.newAndroid,
+								}, {
+								  value: {"os": "Windows"},
+								  label: 'Windows',
+								  children: response.data.newWindows,
+								}]
+								}, {
+								value: {"subversion": "OemNewVersion"},
+								label: 'OEM新版',
+								children: [ {
+									  value: {"os": "Windows"},
+									  label: 'Windows',
+									  children: response.data.newOEMWindows,
+									}]
+								}];											
+
+							this.options.v3 = [{
+								value: {"version" : "zhonglunV3"},
+								label: '中仑V3',
+								children: [{
+									value: {"subversion": "tongyong"},
+									label: '通用',
+									children: [ {
+											  value:  {"os": "Android"},
+											  label: 'Android',
+											  children: response.data.standardTongyongYXLAndroidV3
+												 }, {
+											  value:  {"os": "Windows"},
+											  label: 'Windows',
+											  children: response.data.standardTongyongYXLWindowsV3
+												}],
+										},
+									{
+									value: {"subversion": "nongmao"},
+									label: '农贸',
+									children: [{
+										value:  {"os": "Android"},
+										label: 'Android',
+										children: response.data.standardNongmaoYXLAndroidV3
+									  }, {
+										value: {"os": "Windows"},
+										label: 'Windows',
+										children: response.data.standardNnongmaoYXLWindowsV3
+										 }]
+									 }]},
+								{
+								value:  {"version" : "OemNewV3"},
+								label: 'OEMV3',
+								children: [{
+									value:  {"subversion": "tongyong"},
+									label: '通用',
+									children: [ {
+										value: {"os": "Android"},
+										label: 'Android',
+										children: response.data.tongyongYXLAndroidV3,
+									  }, {
+										value: {"os": "Windows"},
+										label: 'Windows',
+										children: response.data.tongyongYXLWindowsV3,
+										}
+									  ]},
+								{
+								  value: {"subversion": "nongmao"},
+								  label: '农贸',
+								  children: [ {
+										  value: {"os": "Android"},
+										  label: 'Android',
+										  children: response.data.nongmaoYXLAndroidV3,
+									  }, {
+										  value: {"os": "Windows"},
+										  label: 'Windows',
+										  children: response.data.nongmaoYXLWindowsV3,
+									  }]
+								 }]
+								}] ;							
+		
+							this.options.v5 = [ {
+							  value: {"version" : "zhonglunV5"},
+							  label: '中仑V5',
+							  children: [ {
+								  value: {"subversion": "tongyong"},
+								  label: '通用',
+								  children: [ {
+									  value: {"os": "Android"} ,
+									  label: 'Android',
+									  children: response.data.tongyongYXLAndroidV5
+								  }, {
+									  value:  {"os": "Windows"},
+									  label: 'Windows',
+									  children: response.data.tongyongYXLWindowsV5
+								  }
+									] } ]
+								}]	;					
+					
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+																
+																
+							}		  
+		                )
+					},
+	  
+	methods: {
+		    onSubmit2 () {
+		    	this.$confirm('此操作将提交发版参数, 是否继续?', '提示', {
+		    	          confirmButtonText: '确定',
+		    	          cancelButtonText: '取消',
+		    	          type: 'warning'
+		    	        }).then(() => {
+							      console.log( this.form)
+		    					  this.axios({
+		    							  method:"post",
+		    							  url:"/api/demo/record/",
+		    							  data:this.form
+		    						  }).then((res)=>{
+													this.$alert('此次提交发版参数ID: '+ res.data.id , '提交ID', {
+		    							            confirmButtonText: '确定',
+		    							            callback: action => {
+															  this.$message({
+																type: 'info',
+																message: '此次提交发版参数ID: ' + res.data.id 
+															  });
+															}
+														});
+													})}) 
+				  .catch(() => {
+			      //console.log("hell0")		  
+				  this.$message({
+					type: 'info',
+					message: '放弃提交！'
+				  });          
+				});
+			} ,
+		    		
+
+
+			show_version(){
+				++this.options.iscascaderShow;
+				this.options.options = this.options[this.form.version];
+			},
+			      handleClick(tab, event) {
+			        console.log(tab, event);
+			      }
+	      },
+    data() {
+      return {
+		  form: {
+			version: '',
+			industries:[],
+			android: {
+					svnAddress: '',
+					versionNumber: '',
+					releaseMethod : '',
+					forceUpgrade: '',
+					targetRelease: '',
+					hotUpgradeVersion: '',
+				},
+			windows: {
+				svnAddress: '',
+				versionNumber: '',
+				releaseMethod : '',
+				forceUpgrade: '',
+				ignoreVersion: '',
+				targetRelease: '',
+			  },
+			releaseEnv:'',
+			releaseTime:'',
+			upgradeLog: '' ,
+			h5PrimaryScreen:'',
+			h5SecondaryScreen:'',
+		  },	
+		  options:{
+			  iscascaderShow: 0,
+			  activeName: 'windows',
+			  oldVersion:[],
+			  newVersion: [],
+			  v3: [],
+			  v5: [],
+			  rules: {
+			            appName: [
+			              { required: true, message: '请输入应用名称', trigger: ['blur'] },
+						  { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }],
+						releaseEnv: [
+						  { required: true, message: '请输入发布环境', trigger: ['blur']},
+						  { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' } 
+							],
+						version: [
+						  { required: true, message: '请输入版本', trigger: ['blur','change']},
+							],
+						version: [
+						  { required: true, message: '请选择', trigger: ['blur','change']},
+							],
+			            releaseTime: [
+			              { required: true, message: '必须输入', trigger: ['blur','change']},
+			            	],
+					},
+			  options:[],
+			  hotUpgradeVersion:'',
+			  props: { multiple: true },
+			  version: [{
+			            value: 'oldVersion',
+			            label: '老版'
+			          }, {
+			          value: 'newVersion',
+			          label: '新版'
+			          },{
+			            value: 'v3',
+			            label: '银响力V3'
+			          },  {
+			  					    value: 'v5',
+			  					    label: '银响力V5'
+			  					  }],
+			  androidReleaseMethods: [{
+			            value: 'incremental',
+			            label: '增量'
+			          }, {
+			            value: 'full',
+			            label: '全量'
+			          },{
+			            value: 'h5hot',
+			            label: 'h5热更'
+			          }],	
+				windowsReleaseMethods: [{
+				          value: 'incremental',
+				          label: '增量'
+				        }, {
+				          value: 'full',
+				          label: '全量'
+				        }],		  
+		  },
+		 
+      };
+    }
+  };
+</script>
