@@ -19,19 +19,22 @@ package org.apache.rocketmq.dashboard.model;
 public class ConsumerMonitorConfig {
     private int minCount;
     private int maxDiffTotal;
+    private String engineerMobiles;
 
     public ConsumerMonitorConfig() {
     }
 
-    public ConsumerMonitorConfig(int minCount, int maxDiffTotal) {
+    public ConsumerMonitorConfig(int minCount, int maxDiffTotal, String engineerMobiles ) {
         this.minCount = minCount;
         this.maxDiffTotal = maxDiffTotal;
+        this.engineerMobiles = engineerMobiles;
     }
+
+
 
     public int getMinCount() {
         return minCount;
     }
-
     public void setMinCount(int minCount) {
         this.minCount = minCount;
     }
@@ -43,4 +46,12 @@ public class ConsumerMonitorConfig {
     public void setMaxDiffTotal(int maxDiffTotal) {
         this.maxDiffTotal = maxDiffTotal;
     }
+
+    public String getEngineerMobiles () {
+        return engineerMobiles ;
+    }
+    public void setEngineerMobiles(String engineerMobiles) {
+        this.engineerMobiles = engineerMobiles;
+    }
+
 }

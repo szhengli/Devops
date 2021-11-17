@@ -49,6 +49,9 @@ public class MonitorTask {
 
             if (consumeInfo.getCount() < configEntry.getValue().getMinCount() || consumeInfo.getDiffTotal() > configEntry.getValue().getMaxDiffTotal()) {
                 logger.info("op=look consumeInfo {}", JsonUtil.obj2String(consumeInfo)); // notify the alert system
+                logger.info("///////////////////////////////////////////////");
+                logger.info("################################" +configEntry.getValue().getEngineerMobiles() );
+                logger.info("///////////////////////////////////////////////");
                 SendTextMessage.send("mq alert: \n" + "SubscriptionGroup: " + consumeInfo.getGroup() + "\n"+
                         "Instances: " + consumeInfo.getCount()  + "\n" +
                         "Delay: " + consumeInfo.getCount()  + "\n" +

@@ -312,13 +312,17 @@ module.controller('consumerController', ['$scope', 'ngDialog', '$http', 'Notific
 }])
 module.controller('consumerMonitorDialogController', function ($scope, ngDialog, $http, Notification) {
         $scope.createOrUpdateConsumerMonitor = function () {
+            if ($scope.ngDialogData.data.engineerMobiles == null){
+                $scope.ngDialogData.data.engineerMobiles=""
+            }
             $http({
                 method: "POST",
                 url: "monitor/createOrUpdateConsumerMonitor.do",
                 params: {
                     consumeGroupName: $scope.ngDialogData.consumerGroupName,
                     minCount: $scope.ngDialogData.data.minCount,
-                    maxDiffTotal: $scope.ngDialogData.data.maxDiffTotal
+                    maxDiffTotal: $scope.ngDialogData.data.maxDiffTotal,
+                    engineerMobiles: $scope.ngDialogData.data.engineerMobiles
                 }
             }).success(function (resp) {
                 if (resp.status == 0) {

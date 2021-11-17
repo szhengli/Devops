@@ -56,8 +56,8 @@ public class MonitorControllerTest extends BaseControllerTest {
         super.mockRmqConfigure();
         when(configure.getRocketMqDashboardDataPath()).thenReturn("/tmp/rocketmq-console/test/data");
         Map<String, ConsumerMonitorConfig> configMap = new ConcurrentHashMap<>();
-        configMap.put(consumeGroupName, new ConsumerMonitorConfig(0, 100));
-        configMap.put(consumeGroupName1, new ConsumerMonitorConfig(10, 200));
+        configMap.put(consumeGroupName, new ConsumerMonitorConfig(0, 100,""));
+        configMap.put(consumeGroupName1, new ConsumerMonitorConfig(10, 200,""));
         ReflectionTestUtils.setField(monitorService, "configMap", configMap);
         filePath = configure.getRocketMqDashboardDataPath()
             + File.separatorChar + "monitor" + File.separatorChar + "consumerMonitorConfig.json";
@@ -69,7 +69,8 @@ public class MonitorControllerTest extends BaseControllerTest {
         requestBuilder = MockMvcRequestBuilders.post(url);
         requestBuilder.param("consumeGroupName", consumeGroupName)
             .param("minCount", String.valueOf(0))
-            .param("maxDiffTotal", String.valueOf(100));
+            .param("maxDiffTotal", String.valueOf(100))
+            .param("engineerMobiles", String.valueOf(""));
         perform = mockMvc.perform(requestBuilder);
 
         Map<String, ConsumerMonitorConfig> map =
@@ -91,7 +92,8 @@ public class MonitorControllerTest extends BaseControllerTest {
         perform.andExpect(status().isOk())
             .andExpect(jsonPath("$.data").isMap())
             .andExpect(jsonPath("$.data.group_test.minCount").value(0))
-            .andExpect(jsonPath("$.data.group_test.maxDiffTotal").value(100));
+            .andExpect(jsonPath("$.data.group_test.maxDiffTotal").value(100))
+            .andExpect(jsonPath("$.data.group_test.engineerMobiles").value(""));;
     }
 
     @Test
@@ -102,7 +104,8 @@ public class MonitorControllerTest extends BaseControllerTest {
         perform = mockMvc.perform(requestBuilder);
         perform.andExpect(status().isOk())
             .andExpect(jsonPath("$.data.minCount").value(0))
-            .andExpect(jsonPath("$.data.maxDiffTotal").value(100));
+            .andExpect(jsonPath("$.data.maxDiffTotal").value(100))
+            .andExpect(jsonPath("$.data.engineerMobiles").value(""));;
     }
 
     @Test
