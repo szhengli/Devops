@@ -16,6 +16,7 @@
  */
 package org.apache.rocketmq.dashboard.task;
 
+import java.util.ArrayList;
 import java.util.Map;
 import javax.annotation.Resource;
 
@@ -42,24 +43,33 @@ public class MonitorTask {
 
     @Scheduled(cron = "3 * * * * ?")
     public void scanProblemConsumeGroup() {
-
-
         for (Map.Entry<String, ConsumerMonitorConfig> configEntry : monitorService.queryConsumerMonitorConfig().entrySet()) {
             GroupConsumeInfo consumeInfo = consumerService.queryGroup(configEntry.getKey());
+            String engineerBobiles = configEntry.getValue().getEngineerMobiles();
 
             if (consumeInfo.getCount() < configEntry.getValue().getMinCount() || consumeInfo.getDiffTotal() > configEntry.getValue().getMaxDiffTotal()) {
                 logger.info("op=look consumeInfo {}", JsonUtil.obj2String(consumeInfo)); // notify the alert system
                 logger.info("///////////////////////////////////////////////");
-                logger.info("################################" +configEntry.getValue().getEngineerMobiles() );
+                logger.info("################################" + configEntry.getValue().getEngineerMobiles());
                 logger.info("///////////////////////////////////////////////");
-                SendTextMessage.send("mq alert: \n" + "SubscriptionGroup: " + consumeInfo.getGroup() + "\n"+
-                        "Instances: " + consumeInfo.getCount()  + "\n" +
-                        "Delay: " + consumeInfo.getCount()  + "\n" +
-                        "Tps: " + consumeInfo.getConsumeTps()  + "\n" +
-                        "Delay: " + consumeInfo.getDiffTotal()
-                );
+
+                String msg = "mq alert: \n" + "SubscriptionGroup: " + consumeInfo.getGroup() + "\n" +
+                        "Instances: " + consumeInfo.getCount() + "\n" +
+                        "Delay: " + consumeInfo.getCount() + "\n" +
+                        "Tps: " + consumeInfo.getConsumeTps() + "\n" +
+                        "Delay: " + consumeInfo.getDiffTotal();
+
+                if (engineerBobiles.equals("")) {
+                    SendTextMessage.send(msg);
+                } else {
+                    ArrayList<String> mobiles = new ArrayList<String>();
+                    for (String engineerMobile : engineerBobiles.split(",")) {
+                        mobiles.add(engineerMobile.split(":")[1]);
+                        SendTextMessage.sendWithAt(msg, mobiles);
+                        System.out.println(engineerMobile.split(":")[1]);
+                    }
+                }
             }
         }
     }
-
 }
