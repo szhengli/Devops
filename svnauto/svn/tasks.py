@@ -24,9 +24,16 @@ def add(x, y):
     return msg
 
 @shared_task
-def autoCreateJenkinsAuth(sysops, target, branch):
+def autoCreateJenkinsAuth(sysops, target, branch, eta_remove_auth_str):
     print("begin to create jenkins auth with:" + str(sysops))
-    autoAuth(sysops, target, branch)
+
+    print("-----------------------------********* eta_remove_auth *** task ********--------------------------")
+    print(type(eta_remove_auth_str))
+    print(eta_remove_auth_str)
+    print("------------------------------------------------------------------------")
+
+
+    autoAuth(sysops, target, branch, eta_remove_auth_str)
     msg = "comleted the autocreate in jenkins"
     print(msg)
     sendMsg(msg)
@@ -34,9 +41,9 @@ def autoCreateJenkinsAuth(sysops, target, branch):
 
 
 @shared_task
-def autoRemoveJenkinsAuth(sysops, target):
+def autoRemoveJenkinsAuth(sysops, target, eta_remove_auth_str):
     print("begin to remove jenkins auth")
-    unsssignRole(sysops, target)
+    unsssignRole(sysops, target, eta_remove_auth_str)
     msg = "comleted the removal of auth in jenkins"
     print(msg)
     print(datetime.now())

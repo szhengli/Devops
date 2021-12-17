@@ -9,7 +9,7 @@ from datetime import datetime, timedelta
 from random import randrange
 from .ecs import start_ecs, stop_ecs
 from redis.sentinel import Sentinel
-import json
+import json, time
 
 
 logger = logging.getLogger("django")
@@ -52,8 +52,14 @@ def jenkinsAutoAuth(request):
         applicant = request.POST.get('applicant')
 
         eta_remove_auth = utcPublishTime + timedelta(hours=24, seconds=randrange(*range_create))
-        args_create = (sysops, target, branch)
-        args_remove = (sysops, target)
+       # eta_remove_auth = utcPublishTime + timedelta(minutes=10, seconds=randrange(*range_create))
+        eta_remove_auth_str = eta_remove_auth.strftime("%Y-%m-%d %H:%M:%S")
+        print("-----------------------------********* eta_remove_auth_str ***********--------------------------")
+        print(type(eta_remove_auth_str))
+        print(eta_remove_auth_str)
+        print("------------------------------------------------------------------------")
+        args_create = (sysops, target, branch, eta_remove_auth_str)
+        args_remove = (sysops, target, eta_remove_auth_str)
         autoCreateJenkinsAuth.apply_async(args_create, countdown=randrange(*range_create))
         autoRemoveJenkinsAuth.apply_async(args_remove, eta=eta_remove_auth)
         print(sysops)
@@ -182,7 +188,7 @@ def branchRw(request):
     if request.method == 'POST':
         svnAddresses = request.POST.get('svnAddresses')
         username = request.POST.get('originatorUserName')
-        svnurls = re.split('[ \n,、，]+', svnAddresses.strip())
+        svnurls = re.split('[ \n,、，；;]+', svnAddresses.strip())
         report = ""
         for svnurl in svnurls:
             code, message = checkRecord(svnurl, "undo", username)
@@ -243,7 +249,7 @@ def branchNew(request):
             includedSystems = request.POST.get('includedSystems')
             username = request.POST.get('originatorUserName')
             comment = "分支操作备注:" + request.POST.get("comment").replace(' ', '').replace('\n', '').replace(';', '')
-            projects = re.split('[ \n,、，]+', includedSystems.strip())
+            projects = re.split('[ \n,、，；;]+', includedSystems.strip().lower())
             for project in projects:
                 svnurl = svnBranchParent + "/" + year + "/" + month + "/" + branch + "/" + project
                 code, message = checkRecord(svnurl, "add", username, comment)
@@ -257,9 +263,11 @@ def branchNew(request):
                     logger.info("分支新建: " + cmd)
                     status, msg = getstatusoutput(cmd)
                     if status == 0:
+                        ts = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+                        update_release(branch=branch, service=project, fieldName="created", fieldValue=ts)
                         msg = msg
                     else:
-                        msg = branch + project + " svn分支创建失败"
+                        msg = branch + project + " svn分支创建失败" + " @" + username
                     logger.info(msg)
                     notify(msg)
                 else:
@@ -291,7 +299,7 @@ def branchChange(request):
             print(addedSystems)
             print("////////////////////////////////////////////////////////////////////////////////")
             if addedSystems and addedSystems != "null":
-                addedProjects = re.split('[ \n,、，]+', addedSystems.strip())
+                addedProjects = re.split('[ \n,、，；;]+', addedSystems.strip())
                 for project in addedProjects:
                     svnurl = svnBranchParent + "/" + year + "/" + month + "/" + branch + "/" + project
                     code, message = checkRecord(svnurl, "add", username, comment)
@@ -302,6 +310,8 @@ def branchChange(request):
                         logger.info("分支调整: " + cmd)
                         status, msg = getstatusoutput(cmd)
                         if status == 0:
+                            ts = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+                            update_release(branch=branch, service=project, fieldName="created", fieldValue=ts)
                             msg = msg
                         else:
                             msg = branch + project + "分支创建失败"
@@ -327,6 +337,8 @@ def branchChange(request):
                     if status == 0:
                         msg = "svn分支: " + branch + "/" + project + "删除成功!"
                         svnurl = svnBranchParent + "/" + year + "/" + month + "/" + branch + "/" + project
+                        ts = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+                        update_release(branch=branch, service=project, fieldName="deleted", fieldValue=ts)
                         checkRecord(svnurl, "remove", username, comment)
                     else:
                         msg = "svn分支: " + branch + "/" + project + "删除失败!"
@@ -357,7 +369,7 @@ def branchMove(request):
             includedSystems = request.POST.get('includedSystems')
             # 删除说明中的空格，否则shell执行会报错。
             comment = "分支操作备注:" + request.POST.get("comment").replace(' ', '').replace('\n', '').replace(';', '')
-            projects = re.split('[ \n,、，]+', includedSystems.strip())
+            projects = re.split('[ \n,、，；;]+', includedSystems.strip().lower())
             report = ""
             for project in projects:
                 cmd = "bash  /data/script/branchMove.sh %s %s %s %s %s %s" % (
@@ -369,10 +381,14 @@ def branchMove(request):
                     msg = msg
                     svnurl = svnBranchParent + "/" + year + "/" + month + "/" + desBranch + "/" + project
                     checkRecord(svnurl, "move", username, comment, srcBranch)
+                    ts = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
                     if keep == "yes":
                         svnurlSrc = svnBranchParent + "/" + yearSrc + "/" + monthSrc + "/" + srcBranch + "/" + project
                         checkRecord(svnurlSrc, "add", username, comment)
                         checkRecord(svnurlSrc, "close", username)
+                    else:
+                        update_release(branch=srcBranch, service=project, fieldName="deleted", fieldValue=ts)
+                    update_release(branch=desBranch, service=project, fieldName="created", fieldValue=ts)
                 else:
                     msg = srcBranch + project + " svn分支迁移失败"
                     report = report + msg + "\n"
@@ -404,8 +420,8 @@ def check(request, branch):
 
 def update_release(branch="", service="", fieldName="", fieldValue=""):
     keyName = f"{branch}:{service}"
-    sentinel = Sentinel([('192.168.1.32', 17020), ('192.168.1.32', 17020),
-                         ('192.168.1.32', 17020)], socket_timeout=0.1)
+    sentinel = Sentinel([('192.168.1.32', 17020), ('192.168.1.33', 17020),
+                         ('192.168.1.34', 17020)], socket_timeout=0.1)
     redis = sentinel.master_for('release_master_1', decode_responses=True)
     redis.hmset(keyName, mapping={fieldName: fieldValue,
                                   "service": service
@@ -429,8 +445,8 @@ def update_block(svnurl, block):
         print(f"fail to update {service} in redis")
 
 def get_all_branches(request):
-    sentinel = Sentinel([('192.168.1.32', 17020), ('192.168.1.32', 17020),
-                         ('192.168.1.32', 17020)], socket_timeout=0.1)
+    sentinel = Sentinel([('192.168.1.32', 17020), ('192.168.1.33', 17020),
+                         ('192.168.1.34', 17020)], socket_timeout=0.1)
     redis = sentinel.master_for('release_master_1', decode_responses=True)
     branches = sorted(list(set(list(x.split(":")[0] for x in redis.keys("202*")))), reverse=True)
     data = [{"value": x, "label": x} for x in branches]
@@ -438,8 +454,8 @@ def get_all_branches(request):
 
 def get_release(branch="20210831"):
     pattern = f"{branch}:*"
-    sentinel = Sentinel([('192.168.1.32', 17020), ('192.168.1.32', 17020),
-                         ('192.168.1.32', 17020)], socket_timeout=0.1)
+    sentinel = Sentinel([('192.168.1.32', 17020), ('192.168.1.33', 17020),
+                         ('192.168.1.34', 17020)], socket_timeout=0.1)
     redis = sentinel.master_for('release_master_1', decode_responses=True)
     return [redis.hgetall(keyName) for keyName in redis.keys(pattern)]
 

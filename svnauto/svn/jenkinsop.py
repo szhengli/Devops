@@ -2,6 +2,8 @@ from jenkins import Jenkins
 from xpinyin import Pinyin
 import xml.etree.ElementTree as ET
 import re
+from redis.sentinel import Sentinel
+from datetime import datetime
 
 NORMAL_SVN_ROOT = "http://svn.cnzhonglunnet.com/svn/zlnet/code/project/branch/"
 JENKINS_CONN = {"url": "http://172.19.233.38:8080/", "username": "admin", "password": "admin"}
@@ -136,7 +138,14 @@ def getRoleAndPattern(sysop, target):
     return role, user, service, pattern
 
 
-def autoAuth(sysops, target, branch):
+
+
+def autoAuth(sysops, target, branch, eta_remove_auth_str):
+
+    sentinel = Sentinel([('192.168.1.32', 17020), ('192.168.1.33', 17020),
+                         ('192.168.1.34', 17020)], socket_timeout=0.1)
+    redis = sentinel.master_for('release_master_1', decode_responses=True)
+
     for sysop in sysops:
         if "@" in sysop:
             role, user, service, pattern = getRoleAndPattern(sysop, target)
@@ -145,6 +154,31 @@ def autoAuth(sysops, target, branch):
             print("service：" + service)
             print("pattern：" + pattern)
             print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+
+            job_key = "remove-eta-" + role + "-" + user
+            rollback_key = "remove-eta-" + role + "-rollback" + "-" + user
+
+            print("------------------autoAuth-------- before ---********* eta_remove_auth_str ***********--------------------------")
+            print(type(eta_remove_auth_str))
+            print(eta_remove_auth_str)
+            print("------------------------------------------------------------------------")
+
+            eta_remove_auth = datetime.strptime(eta_remove_auth_str, "%Y-%m-%d %H:%M:%S")
+
+
+            print("------------------autoAuth-----------********* eta_remove_auth  datetime??***********--------------------------")
+            print(type(eta_remove_auth))
+            print(eta_remove_auth)
+            print("------------------------------------------------------------------------")
+
+            if redis.exists(job_key):
+                if datetime.strptime(redis.get(job_key), "%Y-%m-%d %H:%M:%S") < eta_remove_auth:
+                    redis.set(job_key, eta_remove_auth_str)
+                    redis.set(rollback_key, eta_remove_auth_str)
+            else:
+                redis.set(job_key, eta_remove_auth_str)
+                redis.set(rollback_key, eta_remove_auth_str)
+
             createUser(user)
             grantRole(role, pattern, user)
             grantRole(role + "-rollback", pattern + "-rollback", user)
@@ -152,8 +186,9 @@ def autoAuth(sysops, target, branch):
             print("service entry has no releaser")
             service = sysop
         SVNUpdate(service, branch, target)
+    redis.close()
 
-def unsssignRole(sysops, target):
+def unsssignRole(sysops, target, eta_remove_auth_str):
     cmdTemplate = '''
             import jenkins.model.Jenkins
             import hudson.security.PermissionGroup
@@ -172,12 +207,44 @@ def unsssignRole(sysops, target):
             jk.setAuthorizationStrategy(rbas)
             jk.save()
         '''
+
+    sentinel = Sentinel([('192.168.1.32', 17020), ('192.168.1.33', 17020),
+                         ('192.168.1.34', 17020)], socket_timeout=0.1)
+    redis = sentinel.master_for('release_master_1', decode_responses=True)
+
     for sysop in sysops:
         if "@" in sysop:
             role, user, _, _ = getRoleAndPattern(sysop, target)
-            cmd = cmdTemplate.format(role=role, user=user)
-            cmd_rollback = cmdTemplate.format(role=role + "-rollback", user=user)
-            # print(cmd)
-            jk = Jenkins(**JENKINS_CONN)
-            info = jk.run_script(cmd)
-            info_rollback = jk.run_script(cmd_rollback)
+
+            job_key = "remove-eta-" + role + "-" + user
+            rollback_key = "remove-eta-" + role + "-rollback" + "-" + user
+
+          #  eta_remove_auth = datetime.strptime(eta_remove_auth_str, "%Y-%m-%d %H:%M:%S")
+
+            print("@@@@@@@@@@@@@@@@@@！show time @@@@@@@@@@@@@@@@")
+            print(redis.get(job_key))
+            print(eta_remove_auth_str)
+            print(redis.get(job_key) == eta_remove_auth_str)
+            print("@@@@@@@@@@@@@@@@@@@@@@@@@@")
+
+            if redis.exists(job_key):
+                if redis.get(job_key) == eta_remove_auth_str:
+
+                    cmd = cmdTemplate.format(role=role, user=user)
+                    cmd_rollback = cmdTemplate.format(role=role + "-rollback", user=user)
+                    # print(cmd)
+                    jk = Jenkins(**JENKINS_CONN)
+                    info = jk.run_script(cmd)
+                    info_rollback = jk.run_script(cmd_rollback)
+                    print("################# remove redis key  ############################")
+                    redis.delete(job_key, rollback_key)
+            else:
+                print("################# remove redis key  not exist ############################")
+                cmd = cmdTemplate.format(role=role, user=user)
+                cmd_rollback = cmdTemplate.format(role=role + "-rollback", user=user)
+                # print(cmd)
+                jk = Jenkins(**JENKINS_CONN)
+                info = jk.run_script(cmd)
+                info_rollback = jk.run_script(cmd_rollback)
+    redis.close()
+
