@@ -1,0 +1,2 @@
+echo $GOPROXY
+echo $place

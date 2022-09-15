@@ -3,31 +3,73 @@ pipeline {
     options {
       ansiColor('xterm')
     }
+
+   environment {
+        serviceName = """${sh( returnStdout: true,
+                             script: '''
+                                    echo  $SVN_URL |  awk -F '[/]+' '{ printf  $NF }'
+                             '''
+                         )}"""
+        ENV = """${sh( returnStdout: true,
+                             script: '''
+                                    echo $JOB_NAME | cut -d- -f1 | xargs echo -n
+                             '''
+                         )}"""
+        MVNENV = """${sh(
+                             returnStdout: true,
+                             script: '''
+                                    echo $JOB_NAME | cut -d- -f1 | tr -d "v5" | xargs echo -n
+                             '''
+                         )}"""
+        CONTEXT = """${sh(
+                             returnStdout: true,
+                             script: '''
+                                   echo $JOB_NAME | cut -d- -f2 | xargs echo -n
+                             '''
+                         )}"""
+
+
+        BRANCH = """${sh(
+                             returnStdout: true,
+                             script: '''
+                                    if echo $SVN_URL | grep "trunk" -q;then
+                                          echo $SVN_URL |  awk -F '[/]+' '{ printf  $(NF-2) }'
+                                    else
+                                          echo $SVN_URL |  awk -F '[/]+' '{ printf  $(NF-1) }'
+                                    fi
+                             '''
+                         )}"""
+        jobName = """${sh(
+                             returnStdout: true,
+                             script: '''
+                                    echo $JOB_NAME | cut -d- -f3 | xargs echo -n
+                             '''
+                         )}"""
+        paras = """${sh(
+                             returnStdout: true,
+                             script: '''
+                                     if [[ $ENV == pre ]]; then
+                                           [[ -n $(eval echo '$'"$ENV""_""$serviceName"_Replics) ]] && echo -n $(eval echo '$'"$ENV""_""$serviceName"_Replics)  || echo -n "2 2"
+                                        else
+                                           [[ -n $(eval echo '$'"$ENV""_""$serviceName"_Replics) ]] && echo -n $(eval echo '$'"$ENV""_""$serviceName"_Replics) || echo -n "1 1"
+                                        fi
+                             '''
+                         )}"""
+
+    }
+
     stages {
            stage('Build') {
                 steps {
-                     script {
-                        def get_serviceName = sh(script: '''
-                                          echo $SVN_URL |  awk -F '[/]+' '{ print  $NF }'
-                                          ''' , returnStdout: true).trim()
-                        env.serviceName = get_serviceName
-                        def get_ENV = sh(script: '''
-                                          echo $JOB_NAME | cut -d- -f1
-                                          ''' , returnStdout: true).trim()
-                        env.ENV = get_ENV
-                        def get_MVNENV = sh(script: '''
-                                          echo $JOB_NAME | cut -d- -f1 | tr -d "v5"
-                                          ''' , returnStdout: true).trim()
-                        env.MVNENV = get_MVNENV
-                        def get_CONTEXT = sh(script: '''
-                                          echo $JOB_NAME | cut -d- -f2
-                                          ''' , returnStdout: true).trim()
-                        env.CONTEXT = get_CONTEXT
-                     }
 
                     sh '''
+					env
                     id && pwd
-                    mvn -f ${serviceName}-pom/pom.xml clean install package -P ${MVNENV} -Dmaven.test.skip=true
+					if [[ $jobName == $serviceName ]];then
+						mvn -f ${serviceName}-pom/pom.xml clean install package -P ${MVNENV} -Dmaven.test.skip=true
+					else
+					    echo "SVN分支路径有误,请按照对应环境填写对应的SVN路径!!!" && exit 1
+					fi
                     '''
                    }
 			    post {
@@ -42,7 +84,6 @@ pipeline {
             stage ('Make image'){
                   steps {
                      sh '''
-                         env
                          make_image.sh
                          '''
                   }
@@ -51,12 +92,6 @@ pipeline {
             stage ('Deploy'){
 			       steps {
                      sh '''
-                         env
-						 if [[ $ENV == pre ]]; then
-                            [[ -n $(eval echo '$'"$ENV""_""$serviceName"_Replics) ]] && paras=$(eval echo '$'"$ENV""_""$serviceName"_Replics) || paras="2 2"
-                         else
-                            [[ -n $(eval echo '$'"$ENV""_""$serviceName"_Replics) ]] && paras=$(eval echo '$'"$ENV""_""$serviceName"_Replics) || paras="1 1"
-                         fi
                          deploy.sh  ${paras}
                          '''
 					 }
@@ -66,13 +101,12 @@ pipeline {
                   steps {
 
                     sh '''
-                         if [[ $ENV == pre ]]; then
-                            [[ -n $(eval echo '$'"$ENV""_""$serviceName"_Replics) ]] && paras=$(eval echo '$'"$ENV""_""$serviceName"_Replics) || paras="2 2"
-                         else
-                            [[ -n $(eval echo '$'"$ENV""_""$serviceName"_Replics) ]] && paras=$(eval echo '$'"$ENV""_""$serviceName"_Replics) || paras="1 1"
-                         fi
                         check_health.sh   ${paras}
                     '''
+					script{
+						// 显示当前运行的分支
+						currentBuild.rawBuild.project.description = '当前运行分支: ' + "${env.BRANCH}"
+					}
                   }
             }
     }
