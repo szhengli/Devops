@@ -9,13 +9,14 @@ import (
 
 type Nginx struct {
 	Apis []string `json:"apis"`
+	Env string `json:"env"`
 	Enable bool	`json:"enable"`
 }
 
 const TEMPLATE = `
-			{{ range .Apis}}
-			location = {{ . }} {
-            proxy_pass http://prodv5-basicv5-web;
+			{{ range $location := .Apis}}
+			location = {{ $location }} {
+            proxy_pass http://{{ $.Env }}-basicv5-web-backup;
             proxy_set_header Host $host;
             proxy_set_header X-Real-IP $remote_addr;
             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -27,22 +28,26 @@ const TEMPLATE = `
             proxy_busy_buffers_size 128k;
         }
 		{{ end }}
-`
+	`
 
-const CONFIGFILE = "./switch.conf"
 
+
+func configPath(env string) string{
+	return env + "/switch.conf"
+}
 
 func SwitchConfig(c *gin.Context) {
 	var nginx Nginx
 
 	if  c.ShouldBindJSON(&nginx) == nil {
+		cfgFile := configPath(nginx.Env)
 		if nginx.Enable {
 			if	tmpl, err := template.New("config").Parse(TEMPLATE); err == nil {
-				if os.Remove(CONFIGFILE) != nil {
+				if os.Remove(cfgFile) != nil {
 					log.Println(" The config does not exist, no need to clean!")
 				}
 
-				config, _ := os.OpenFile(CONFIGFILE, os.O_CREATE|os.O_WRONLY,os.ModePerm )
+				config, _ := os.OpenFile(cfgFile, os.O_CREATE|os.O_WRONLY,os.ModePerm )
 
 				defer func(config *os.File) {
 					err := config.Close()
@@ -66,7 +71,7 @@ func SwitchConfig(c *gin.Context) {
 			}
 
 		} else {
-			if os.Remove(CONFIGFILE) != nil {
+			if os.Remove(cfgFile) != nil {
 				log.Println(" The config does not exist, no need to remove!")
 			}
 			log.Println("Remove the switch config file!")

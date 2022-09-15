@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"log"
 	"redisdemo/utils"
@@ -12,6 +13,7 @@ import (
 func main() {
 	gin.SetMode(gin.ReleaseMode)
 	router := gin.Default()
+	router.Use(cors.Default())
 	router.POST("/switch", utils.SwitchConfig)
 
 	log.Println("the server is running at 10000 port!!!")
