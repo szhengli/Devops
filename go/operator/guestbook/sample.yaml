@@ -1,0 +1,16 @@
+apiVersion: webapp.my.domain/v1
+kind: Guestbook
+metadata:
+  labels:
+    app.kubernetes.io/name: guestbook
+    app.kubernetes.io/instance: guestbook-sample
+    app.kubernetes.io/part-of: guestbook
+    app.kuberentes.io/managed-by: kustomize
+    app.kubernetes.io/created-by: guestbook
+  name: guestbook-sample
+  finalizers:
+  - webapp.my.domain/clean      
+spec:
+  configs: "/etc/configs/sample"
+  image: nginx:1.14.2
+  size: 3

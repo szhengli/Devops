@@ -1,0 +1,49 @@
+apiVersion: webapp.my.domain/v1
+kind: Guestbook
+metadata:
+  labels:
+    app.kubernetes.io/name: guestbook
+    app.kubernetes.io/instance: guestbook-sample
+    app.kubernetes.io/part-of: guestbook
+    app.kuberentes.io/managed-by: kustomize
+    app.kubernetes.io/created-by: guestbook
+  name: guestbook-sample
+spec:
+  configs: "/etc/configs/sample"
+  deployTemplate:
+    progressDeadlineSeconds: 600
+    replicas: 2
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app: nginx
+    strategy:
+      rollingUpdate:
+        maxSurge: 25%
+        maxUnavailable: 25%
+      type: RollingUpdate
+    template:
+      annotations:
+        redeploy-timestamp: "1669787442565"
+      metadata:
+        labels:
+          app: nginx
+      spec:
+        containers:
+        - image: nginx:1.13
+          imagePullPolicy: IfNotPresent
+          name: nginx
+          ports:
+          - containerPort: 80
+            protocol: TCP
+          resources:
+            limits:
+              cpu: 500m
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+
