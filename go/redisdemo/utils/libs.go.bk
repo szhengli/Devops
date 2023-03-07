@@ -1,0 +1,86 @@
+﻿package utils
+
+import (
+	"github.com/gin-gonic/gin"
+	"log"
+	"os"
+	"text/template"
+)
+
+type Nginx struct {
+	Apis []string `json:"apis"`
+	Env string `json:"env"`
+	Enable bool	`json:"enable"`
+}
+
+const TEMPLATE = `
+			{{ range $location := .Apis}}
+			location = {{ $location }} {
+            proxy_pass http://{{ $.Env }}-basicv5-web-backup;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_connect_timeout       20;
+            proxy_read_timeout          20;
+            proxy_send_timeout          20;
+            proxy_buffer_size 64k;
+            proxy_buffers   32 32k;
+            proxy_busy_buffers_size 128k;
+        }
+		{{ end }}
+	`
+
+
+
+func configPath(env string) string{
+	return env + "/switch.conf"
+}
+
+func SwitchConfig(c *gin.Context) {
+	var nginx Nginx
+
+	if  c.ShouldBindJSON(&nginx) == nil {
+		cfgFile := configPath(nginx.Env)
+		if nginx.Enable {
+			if	tmpl, err := template.New("config").Parse(TEMPLATE); err == nil {
+				if os.Remove(cfgFile) != nil {
+					log.Println(" The config does not exist, no need to clean!")
+				}
+				config, _ := os.OpenFile(cfgFile, os.O_CREATE|os.O_WRONLY,os.ModePerm )
+
+				defer func(config *os.File) {
+					err := config.Close()
+					if err != nil {
+						log.Println("Fail to close config file.")
+					}
+				}(config)
+
+				if  tmpl.Execute(config, nginx) != nil {
+					log.Println("Fail to create  the switch config file!")
+					c.JSON(400,gin.H{"msg": "Fail to create  the switch config file!"} )
+					return
+				}
+				log.Println("Add the switch config fle!")
+				c.JSON(200, gin.H{"msg" : "Added the switch config file, switched the traffic."} )
+
+			} else {
+				log.Println("Fail parse template.")
+				c.JSON(401,gin.H{"msg": "Fail to parse temple."} )
+				return
+			}
+
+		} else {
+			if os.Remove(cfgFile) != nil {
+				log.Println(" The config does not exist, no need to remove!")
+			}
+			log.Println("Remove the switch config file!")
+			c.JSON(200, gin.H{"msg": "Disabled the switch."} )
+			return
+		}
+
+	} else {
+		c.JSON(403,gin.H{"status": "wrong data format"} )
+	}
+
+
+}
