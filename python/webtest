@@ -1,0 +1,105 @@
+from selenium import webdriver
+from selenium.common import TimeoutException
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.relative_locator import locate_with
+
+import time
+from PIL import Image
+import pytesseract
+
+SHOP_LIST_XPATH = '//*[@id="root"]/div/div[2]/div/div[2]/div[1]'
+SINGLE_SHOP_XPATH = '//*[@id="root"]/div/div[2]/div/div[3]/div[1]/div[1]/img'
+ADVICE_XPATH = '//*[@id="homepage"]/div[1]/div[1]/div[2]/div'
+YXLURL = "https://yxl.zhonglunnet.com"
+
+options = Options()
+# options.page_load_strategy = 'eager'
+options.add_argument("--headless")
+options.add_argument('--no-sandbox')
+
+chrome = webdriver.Chrome(options=options)
+
+print("trying to get page!\n")
+
+chrome.get(YXLURL)
+print("done get page")
+
+
+def get_auth_code(chrome):
+    i = 0
+    while i < 3:
+        try:
+            activeCode = chrome.find_element(locate_with(By.TAG_NAME, "img").to_right_of({By.ID: "yzcode"}))
+            activeCode.screenshot("code.png")
+            im = Image.open('code.png')
+            auth_code = pytesseract.image_to_string(im)[:4]
+            codeInt = int(auth_code.strip())
+            if 1000 < codeInt < 10000:
+                return auth_code
+            i += 1
+            print(auth_code + " is not correct, trying to re-get a new code")
+            chrome.get(YXLURL)
+        except Exception as e:
+            print("something wrong when getting authcode, will try !!!!")
+            print(e)
+            print(" the time:----- " + str(i))
+            i += 1
+            chrome.get(YXLURL)
+    exit(130)
+
+
+def show_shop_list(chrome, auth_code):
+    phone = chrome.find_element(By.ID, value="phone")
+    phone.send_keys("13915533122")
+    password = chrome.find_element(By.ID, value="certificate")
+    password.send_keys("Password1234")
+    auth_code_input = chrome.find_element(By.ID, value="yzcode")
+    auth_code_input.send_keys(auth_code)
+
+    button = chrome.find_element(By.TAG_NAME, value="button")
+    button.click()
+    try:
+        shopList = WebDriverWait(chrome, 4).until(
+            EC.presence_of_element_located((By.XPATH, SHOP_LIST_XPATH))
+        )
+        print(shopList.text)
+    except Exception as e:
+        print("fail to get shop list, test ends ")
+        print(e)
+        exit(110)
+
+
+
+
+def test_advice(chrome):
+    try:
+        singleShop = chrome.find_element(By.XPATH, value=SINGLE_SHOP_XPATH)
+        singleShop.click()
+        opAdvise = WebDriverWait(chrome, 4).until(
+            EC.presence_of_element_located((By.XPATH, ADVICE_XPATH))
+        )
+        print(opAdvise.text)
+    except Exception as e:
+        print("fail to get advice, test ends ")
+        print(e)
+        exit(120)
+
+
+
+print("getting authcode-----")
+auth_code = get_auth_code(chrome)
+print("authcode: " + auth_code)
+print("Test item1:  get shop list.")
+show_shop_list(chrome, auth_code)
+print("PASS")
+
+print("Test item2:  get advice.")
+test_advice(chrome)
+print("PASS")
+
+
+
+
