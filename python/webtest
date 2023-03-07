@@ -51,10 +51,13 @@ def get_auth_code(chrome):
 
 def show_shop_list(chrome, auth_code):
     phone = chrome.find_element(By.ID, value="phone")
+    phone.clear()
     phone.send_keys("13915533122")
     password = chrome.find_element(By.ID, value="certificate")
+    password.clear()
     password.send_keys("Password1234")
     auth_code_input = chrome.find_element(By.ID, value="yzcode")
+    auth_code_input.clear()
     auth_code_input.send_keys(auth_code)
 
     button = chrome.find_element(By.TAG_NAME, value="button")
