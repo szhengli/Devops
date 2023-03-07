@@ -39,15 +39,13 @@ def get_auth_code(chrome):
             codeInt = int(auth_code.strip())
             if 1000 < codeInt < 10000:
                 return auth_code
-            i += 1
             print(auth_code + " is not correct, trying to re-get a new code")
-            chrome.get(YXLURL)
         except Exception as e:
             print("something wrong when getting authcode, will try !!!!")
             print(e)
             print(" the time:----- " + str(i))
-            i += 1
-            chrome.get(YXLURL)
+        i += 1
+        chrome.get(YXLURL)
     exit(130)
 
 
