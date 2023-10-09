@@ -1,0 +1,10 @@
+apiVersion: apisix.apache.org/v2
+kind: ApisixTls
+metadata:
+  name: cnzltls
+spec:
+  hosts:
+    - "*.cnzhonglunnet.com"
+  secret:
+    name: cnzl
+    namespace: default

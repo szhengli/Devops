@@ -1,0 +1,84 @@
+apiVersion: apisix.apache.org/v2
+kind: ApisixRoute
+metadata:
+  name: general
+  namespace: prev5
+spec:
+  http:
+  - name: root
+    match:
+      hosts:
+      - "*pre.cnzhonglunnet.com"
+      paths:
+      - /
+    upstreams:
+    - name: ui-cnzl  
+    plugins:
+    - name: redirect
+      enable: true
+      config:
+        uri: "/ui/"
+        ret_code: 302
+  - name: ui
+    match:
+      hosts:
+      - "*pre.cnzhonglunnet.com"
+      paths:
+      - /ui/*
+    upstreams:
+    - name: ui-cnzl
+  - name: api
+    match:
+      hosts:
+      - "*pre.cnzhonglunnet.com"
+      paths:
+      - /*
+    backends:
+    - serviceName: basicv5-web
+      servicePort: 80
+  - name: rootmts
+    match:
+      hosts:
+      - "mtspre.cnzhonglunnet.com"
+      paths:
+      - /
+    upstreams:
+    - name: ui-cnzl
+    plugins:
+    - name: redirect
+      enable: true
+      config:
+        uri: "/ui/v3/"
+        ret_code: 302
+  - name: rootf
+    match:
+      hosts:
+      - "fpre.cnzhonglunnet.com"
+      paths:
+      - /
+    upstreams:
+    - name: ui-cnzl
+    plugins:
+    - name: redirect
+      enable: true
+      config:
+        uri: "/ui/"
+        ret_code: 302
+  - name: fapi
+    match:
+      hosts:
+      - "fpre.cnzhonglunnet.com"
+      paths:
+      - /*
+    backends:
+    - serviceName: fpapiv5-web
+      servicePort: 80
+  - name: fui
+    match:
+      hosts:
+      - "fpre.cnzhonglunnet.com"
+      paths:
+      - /ui/*
+    upstreams:
+    - name: ui-cnzl
+

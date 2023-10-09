@@ -1,0 +1,49 @@
+apiVersion: v1
+kind: Service
+metadata: 
+  name: uidemo
+spec:
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+---
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: uidemo
+  labels:
+    endpointslice.kubernetes.io/managed-by: staff
+subsets:
+- addresses:
+  - ip: 192.168.3.150
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+  
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: httpbin-route
+spec:
+  ingressClassName: apisix
+  rules:
+    - host: local.httpbin.org
+      http:
+        paths:
+          - backend:
+              service:
+                name: uidemo
+                port:
+                  number: 80
+            path: /ui
+            pathType: Prefix
+          - backend:
+              service:
+                name: httpbin
+                port:
+                  number: 80
+            path: /
+            pathType: Prefix

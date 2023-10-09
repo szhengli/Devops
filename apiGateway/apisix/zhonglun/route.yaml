@@ -1,0 +1,59 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ui-cnzl
+  namespace: prev5
+spec:
+  type: ExternalName
+  externalName: ui-cnzl
+---
+apiVersion: apisix.apache.org/v2
+kind: ApisixUpstream
+metadata:
+  name: ui-cnzl
+  namespace: prev5
+spec:
+  externalNodes:
+  - type: Domain
+    name: ui-cnzl
+
+
+---
+apiVersion: apisix.apache.org/v2
+kind: ApisixRoute
+metadata:
+  name: general
+  namespace: prev5
+spec:
+  http:
+  - name: root
+    match:
+     hosts:
+     - *pre.cnzhonglunnet.com
+     paths:
+     - /
+     upstream:
+     - name: ui-cnzl  
+     plugins:
+      - name: proxy-rewrite
+        enable: true
+        config:
+          regex_uri: ["/","/ui/"]
+  - name: ui
+    match:
+      hosts:
+      - *pre.cnzhonglunnet.com
+    paths:
+    - /ui/*
+    upstream:
+    - name: ui-cnzl
+  - name: api
+    match:
+     hosts:
+     - *pre.cnzhonglunnet.com
+     paths:
+     - /*
+     backends:
+      - serviceName: basicv5-web
+        servicePort: 80
+

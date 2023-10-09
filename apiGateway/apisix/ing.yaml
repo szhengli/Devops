@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: httpbin-route
+spec:
+  ingressClassName: apisix
+  rules:
+    - host: local.httpbin.org
+      http:
+        paths:
+          - backend:
+              service:
+                name: uidemo
+                port:
+                  number: 80
+            path: /ui*
+            pathType: Prefix
+          - backend:
+              service:
+                name: httpbin
+                port:
+                  number: 80
+            path: /
+            pathType: Prefix

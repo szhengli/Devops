@@ -1,0 +1,70 @@
+apiVersion: apisix.apache.org/v2
+kind: ApisixUpstream
+metadata:
+  name: ui-local
+spec:
+  externalNodes:
+  - type: Domain
+    name: ui.local
+
+
+---
+apiVersion: apisix.apache.org/v2
+kind: ApisixRoute
+metadata:
+  name: httpserver-route
+spec:
+  http:
+  - name: httpbin
+    match:
+     hosts:
+     - "route.cnzhonglunnet.com"
+     paths:
+     - /*
+    backends:
+      - serviceName: httpbin
+        servicePort: 80
+  - name: ui-home
+    match:
+     hosts:
+     - "route.cnzhonglunnet.com"
+     paths:
+     - /home*
+    upstreams:
+      - name: ui-local
+    plugins:
+      - name: proxy-rewrite
+        enable: true
+        config:
+          regex_uri: ["^/home(/|$)(.*)","/ui/$2"]
+      - name: response-rewrite
+        enable: true
+        config:
+          body: "this is a test d "
+          headers:
+            add:
+            - "X-Server-test: d"
+            - "Server:  Redhat"
+            - "Remote-IP: $remote_addr"
+  - name: ui
+    match:
+     hosts:
+     - "*pre.cnzhonglunnet.com"
+     paths:
+     - /ui*
+    upstreams:
+      - name: ui-local
+  - name: uatui
+    match:
+     hosts:
+     - "*uat.cnzhonglunnet.com"
+     paths:
+     - /ui*
+    upstreams:
+      - name: ui-local
+    plugins:
+      - name: proxy-rewrite
+        enable: true
+        config:
+          regex_uri: ["^/ui(/|$)(.*)","/uatui/$2"]
+      

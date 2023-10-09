@@ -1,0 +1,11 @@
+# tls.yaml
+apiVersion: apisix.apache.org/v2
+kind: ApisixTls
+metadata:
+  name: sample-tls
+spec:
+  hosts:
+    - mtls.httpbin.local
+  secret:
+    name: demo
+    namespace: default

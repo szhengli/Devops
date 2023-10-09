@@ -1,0 +1,55 @@
+apiVersion: apisix.apache.org/v2
+kind: ApisixUpstream
+metadata:
+  name: ui-local
+spec:
+  externalNodes:
+  - type: Domain
+    name: ui.local
+
+
+---
+apiVersion: apisix.apache.org/v2
+kind: ApisixRoute
+metadata:
+  name: httpserver-route
+spec:
+  http:
+  - name: httpbin
+    match:
+     hosts:
+     - route.httpbin.org
+     paths:
+     - /*
+    backends:
+      - serviceName: httpbin
+        servicePort: 80
+  - name: ui-home
+    match:
+     hosts:
+     - route.httpbin.org
+     paths:
+     - /ui
+     - /ui/
+     - /home*
+    upstreams:
+      - name: ui-local
+    plugins:
+      - name: proxy-rewrite
+        enable: true
+        config:
+          regex_uri: ["^/home(/|$)(ui)*(/|$)*(.*)","/ui/$4"]
+      - name: redirect
+        enable: true
+        config:
+          uri: "$uri/index2.html"
+          ret_code: 301
+        secretRef: redirect-config    
+  - name: ui
+    match:
+     hosts:
+     - route.httpbin.org
+     paths:
+     - /ui/*
+    upstreams:
+      - name: ui-local
