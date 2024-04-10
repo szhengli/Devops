@@ -1,7 +1,6 @@
 package utils2
 
 import (
-	"awesomeProject/utils"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"log"
@@ -28,7 +27,7 @@ func WebUpdate(ctx *gin.Context) {
 }
 
 func WebGetAllBranches(ctx *gin.Context) {
-	branches, err := utils.GetAllBranches()
+	branches, err := GetAllBranches()
 	if err != nil {
 		ctx.JSON(409, gin.H{"error": err})
 		return
@@ -43,7 +42,7 @@ func WebGetBranch(ctx *gin.Context) {
 		ctx.JSON(406, gin.H{"error": "Invalid branch!"})
 		return
 	}
-	details, err := utils.FindBranchDetails(branch)
+	details, err := FindBranchDetails(branch)
 	if err != nil {
 		ctx.JSON(409, gin.H{"error": err})
 		return
@@ -65,6 +64,6 @@ func WebSyncBranch(ctx *gin.Context) {
 	fmt.Println(sysops)
 	log.Println("!!!!!!!!!!!!!!!!!!!!!")
 
-	go SyncFull(branch,sysops)
+	go SyncFull(branch, sysops)
 	ctx.JSON(200, gin.H{"msg": "start syncing to production !"})
 }

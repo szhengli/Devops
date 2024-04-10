@@ -6,6 +6,7 @@ import (
 	"github.com/redis/go-redis/v9"
 	"log"
 	"regexp"
+	"slices"
 	"strconv"
 	"strings"
 	"time"
@@ -34,11 +35,13 @@ func getSyncedValue(key string) bool {
 	res := rdb.HGet(ctx, key, "synced")
 	sync, err := res.Result()
 	if err != nil {
-		log.Fatal(err)
+		log.Println("fail to get synced for: ", key, "  ", err)
+		//log.Fatal(err)
+		return false
 	}
 	synced, err := strconv.ParseBool(sync)
 	if err != nil {
-		log.Fatal(err)
+		log.Println("sync value for: ", key, " fail to convert to bool value, ", err)
 	}
 	return synced
 
@@ -115,8 +118,12 @@ func FindBranchDetails(branch string) (map[string]bool, error) {
 	return details, nil
 }
 
-func syncWithProd(batch string) {
-	sep := "[，, ，：:]"
+func syncWithProd(branch, batch string) {
+
+	msg := "分支: " + branch + "  系统: " + batch + " , 服务同步开始，请关注 ...."
+	NotifyAlls(msg)
+
+	sep := "[，, ，：:、]"
 	services := regexp.MustCompile(sep).Split(batch, -1)
 
 	if len(services) > 0 {
@@ -125,32 +132,24 @@ func syncWithProd(batch string) {
 			jenkinsJob := "sync-prodv5-" + service
 			err := JenkinsBuild(jenkinsJob)
 			if err != nil {
-				msg := keyword + "############################  Jenkins JOB fails to invoke: " + jenkinsJob + "  ######################  "
+				AddOrModifyRecord(branch, service, true)
+				msg := "灰度环境没有部署过" + service + "， 所以无法同步，请人工发布！ 下次不要申请同步这个服务了。"
 				NotifyAlls(msg)
-				return
 			}
-			//invokeJenkinsJob(jenkinsJob, branchAndType, service)
+
 		}
 	} else {
-		fmt.Println("there is no such service in this branch with the pattern: " + batch + " so skip to syn this kind of jenkins job")
+		log.Println("there is no such service in this branch with the pattern: " + batch + " so skip to syn this kind of jenkins job")
 	}
-	msg := "executing jenkins job for " + batch + " ################"
-	NotifyAlls(msg)
-}
-
-func invokeJenkinsJob(jenkinsJob, branchAndType, service string) {
-	println(jenkinsJob + "started ")
-
-	time.Sleep(4 * time.Second) // simulate the real jenkins job execution
-
-	// branchAndType, for  sample 20240220:java or  20240220:html
-	AddOrModifyRecord(branchAndType, service, true)
+	msg = "正在执行jenkins 同步job:  " + batch + " ......."
+	log.Println(msg)
 }
 
 func isSynced(branch, batch string) {
-	sep := "[，, ，：:]"
+	sep := "[，, ，：:、]"
 	services := regexp.MustCompile(sep).Split(batch, -1)
 	total := len(services)
+	var completed []string
 
 	if total > 0 {
 		for {
@@ -159,15 +158,22 @@ func isSynced(branch, batch string) {
 				strings.TrimSpace(service)
 				key := branch + ":" + service
 				if getSyncedValue(key) {
-					fmt.Println(service + "is  synced !!!!!!!!!!!!!!!!!")
+					if !slices.Contains(completed, key) {
+						completed = append(completed, key)
+						msg := "分支: " + branch + "  系统: " + service + " 服务同步完成. !!!!!"
+						NotifyAlls(msg)
+					}
+					msg := service + " is  synced !!!!!!!!!!!!!!!!!"
+					log.Println(msg)
 					counter = counter + 1
 				} else {
-					fmt.Println(service + " is NOT synced .........")
+					log.Println(service + " is NOT synced .........")
 				}
 			}
 
 			if total == counter {
-				fmt.Println(branch + "  " + batch + ": is all synced")
+				msg := "分支: " + branch + "  系统: " + batch + " , 服务同步完成. !!!!!"
+				NotifyAlls(msg)
 				return
 			}
 			time.Sleep(2 * time.Second)
@@ -179,31 +185,22 @@ func isSynced(branch, batch string) {
 
 func SyncFull(branch, batchList string) {
 
-	/*	batchList := `omsv4,      stmsv5,umsv5  ;
-		mbmsv5,zkmsv5, posmsv5  ;
-		yxlweb    ，     yxlmall     ; `
-	*/
 	sep := "[;；]"
 	batches := regexp.MustCompile(sep).Split(batchList, -1)
 
 	for _, batch := range batches {
 		if len(batch) != 0 {
-			go syncWithProd(batch)
+			go syncWithProd(branch, batch)
 			//println("+++" + batch + "++++")
 			isSynced(branch, batch)
-			msg := "[" + branch + "]" + ": " + batch + "synced successfully !"
-			log.Println(msg)
-			NotifyAlls(msg)
 		}
 	}
-	msg := "[" + branch + "]" + ": " + batchList + " have  been ALL synced successfully !!!!"
-	NotifyAlls(msg)
+	msg := "分支: " + branch + "  系统: " + batchList + " , 服务已经全部同步成功. !!!!!！！！！！！"
+	log.Println(msg)
 
 }
 
 func NotifyAlls(msg string) {
-
-	msg = keyword + "  " + msg
 	log.Println(msg)
 	DingNotify(msg)
 

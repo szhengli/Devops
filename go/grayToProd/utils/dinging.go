@@ -1,8 +1,21 @@
 package utils
 
-import "github.com/goex-top/dingding"
+import (
+	"github.com/goex-top/dingding"
+	"strings"
+	"text/template"
+)
 
-const keyword = "[prod]  "
+const (
+	keyword   = "[prod]  "
+	startTmpl = `分支: {{.Branch}},  系统: {{.Services}} , 服务开始同步，请关注 ...`
+	endTmpl   = `分支: {{.Branch}},  系统: {{.Services}} , 服务开始同步，请关注 !!!!!`
+)
+
+type Release struct {
+	Branch   string
+	Services string
+}
 
 func DingNotify(msg string) {
 	var (
@@ -12,4 +25,15 @@ func DingNotify(msg string) {
 	)
 	message := dingding.Message{Content: keyword + msg}
 	ding.SendMessage(message)
+}
+
+func GetMsg(tmpl string, release *Release) string {
+	tmp := template.Must(template.New("zl").Parse(tmpl))
+	res := strings.Builder{}
+	err := tmp.Execute(&res, release)
+	if err != nil {
+		return ""
+	}
+	//log.Println(res.String())
+	return res.String()
 }
