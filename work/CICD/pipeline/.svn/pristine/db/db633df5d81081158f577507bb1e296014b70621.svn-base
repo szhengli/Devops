@@ -1,0 +1,131 @@
+pipeline {
+    agent any
+    options {
+      ansiColor('xterm')
+    }
+	environment {
+		_ENV="${sh(script:'echo $JOB_NAME | cut -d- -f1',returnStdout: true).trim()}"
+		sonartoken = credentials('sonarqube')
+	}
+    stages {
+	       stage('preBuild') {
+			    steps {
+                     script {
+                        def get_serviceName = sh(script: '''
+                                          echo $SVN_URL_2 |  awk -F '[/]+' '{ print  $NF }'
+                                          ''' , returnStdout: true).trim()
+                        env.serviceName = get_serviceName
+                        def get_ENV = sh(script: '''
+                                          echo $JOB_NAME | cut -d- -f1
+                                          ''' , returnStdout: true).trim()
+                        env.ENV = get_ENV
+                        def get_MVNENV = sh(script: '''
+                                          echo $JOB_NAME | cut -d- -f1 | tr -d "v5"
+                                          ''' , returnStdout: true).trim()
+                        env.MVNENV = get_MVNENV
+                        def get_CONTEXT = sh(script: '''
+                                          echo $JOB_NAME | cut -d- -f2
+                                          ''' , returnStdout: true).trim()
+                        env.CONTEXT = get_CONTEXT
+						def get_BRANCH = sh(script: '''
+										  if echo $SVN_URL_2 | grep "trunk" -q;then
+											  echo $SVN_URL_2 |  awk -F '[/]+' '{ print  $(NF-2) }'
+										  else
+										      echo $SVN_URL_2 |  awk -F '[/]+' '{ print  $(NF-1) }' 
+										  fi
+                                          ''' , returnStdout: true).trim()
+                        env.BRANCH = get_BRANCH
+						def get_jobName = sh(script: '''
+										  echo $JOB_NAME | cut -d- -f3
+										  ''' , returnStdout: true).trim()
+						env.jobName = get_jobName
+						
+						// 显示当前已构建使用分支
+						// currentBuild.rawBuild.project.description = '当前已构建使用分支: ' + get_BRANCH
+                     }
+					sh '''
+					if [[ $jobName != $serviceName ]];then
+					    dingding.py ${JOB_NAME} ${serviceName} ${ENV} "SVN分支路径有误"
+					    echo "SVN分支路径有误,请按照对应环境填写对应的SVN路径!!!" && exit 1
+					fi
+                    '''
+				}
+		   }
+		   
+	       stage('Sonar analysis') {
+				when {anyOf{
+					environment name: '_ENV', value: 'sim'
+					environment name: '_ENV', value: 'simv5'
+					environment name: '_ENV', value: 'pet'
+					environment name: '_ENV', value: 'petv5'
+				}}
+			    steps {
+					sh '''
+						mvn -f ${serviceName}-pom/pom.xml -P ${MVNENV} clean verify -Dmaven.test.skip=true \
+						sonar:sonar \
+						-Dsonar.projectKey=${ENV}-${serviceName} \
+						-Dsonar.projectName=${JOB_NAME} \
+						-Dsonar.branch.name=${BRANCH} \
+						-Dsonar.host.url=http://sonar.cnzhonglunnet.com \
+						-Dsonar.login=${sonartoken}
+                    '''
+				}
+		   }
+		   
+           stage('Build') {
+                steps {
+                    sh '''
+					mvn -f ${serviceName}-pom/pom.xml clean package -P ${MVNENV} -Dmaven.test.skip=true
+                    '''
+                   }
+			    post {
+					failure {
+						sh '''
+						dingding.py ${JOB_NAME} ${serviceName} ${ENV} "服务构建失败"
+						'''
+					}
+			   }
+            }
+			
+            stage ('Deploy'){
+			       steps {
+                     sh '''
+						 if [[ $ENV == pre ]]; then
+                            [[ -n $(eval echo '$'"$ENV""_""$serviceName"_Replics) ]] && paras=$(eval echo '$'"$ENV""_""$serviceName"_Replics) || paras="2 2"
+                         else
+                            [[ -n $(eval echo '$'"$ENV""_""$serviceName"_Replics) ]] && paras=$(eval echo '$'"$ENV""_""$serviceName"_Replics) || paras="1 1"
+                         fi
+                         deploy_nopush.sh  ${paras}
+                         '''
+					 }
+            }
+
+            stage ('Check'){
+                  steps {
+                    sh '''
+                         if [[ $ENV == pre ]]; then
+                            [[ -n $(eval echo '$'"$ENV""_""$serviceName"_Replics) ]] && paras=$(eval echo '$'"$ENV""_""$serviceName"_Replics) || paras="2 2"
+                         else
+                            [[ -n $(eval echo '$'"$ENV""_""$serviceName"_Replics) ]] && paras=$(eval echo '$'"$ENV""_""$serviceName"_Replics) || paras="1 1"
+                         fi
+                        check_health.sh   ${paras}
+                    '''
+					script{
+						// 显示当前运行的分支
+						currentBuild.rawBuild.project.description = '当前运行分支: ' + "${env.BRANCH}"
+					}
+                  }
+            }
+    }
+    
+    post {
+        always {
+                cleanWs(
+					patterns:[[pattern: "${serviceName}-admin/target/${serviceName}-admin-1.0.0-exec.jar", type: 'EXCLUDE'],
+							  [pattern: "${serviceName}-web/target/${serviceName}-web-1.0.0-exec.jar", type: 'EXCLUDE'],
+							  [pattern: "${serviceName}/target/${serviceName}-1.0.0-exec.jar", type: 'EXCLUDE']
+							  ])
+        }
+    }
+
+}

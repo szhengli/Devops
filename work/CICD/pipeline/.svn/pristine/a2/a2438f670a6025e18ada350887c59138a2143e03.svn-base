@@ -1,0 +1,110 @@
+pipeline {
+    agent any	
+    stages {
+	       stage('PreBuild') {
+				steps {
+				    script {
+                        def get_serviceName = sh(script: '''
+                                          echo $SVN_URL_2 |  awk -F '[/]+' '{ print  $NF }'
+                                          ''' , returnStdout: true).trim()
+                        env.serviceName = get_serviceName
+                        def get_ENV = sh(script: '''
+                                          echo $JOB_NAME | cut -d- -f1
+                                          ''' , returnStdout: true).trim()
+                        env.ENV = get_ENV
+						def get_MVNENV = sh(script: '''
+                                          echo $JOB_NAME | cut -d- -f1 |sed 's/v5gray//'
+                                          ''' , returnStdout: true).trim()
+                        env.MVNENV = get_MVNENV
+                        def get_CONTEXT = sh(script: '''
+                                          echo $JOB_NAME | cut -d- -f2
+                                          ''' , returnStdout: true).trim()
+                        env.CONTEXT = "gray"
+                        env.BRANCH = get_BRANCH
+                     }
+					sh '''
+				    gray_SendMsg.sh ${BRANCH} ${serviceName} "服务开始发布了，请关注" "开始发布通知" $SVN_URL_2
+					checkSvnStatus.sh
+				    '''
+				}
+		   }
+           stage('Build') {
+                steps {
+                    sh '''
+                    id && pwd
+                    mvn -f ${serviceName}-pom/pom.xml clean install package -P ${MVNENV} -Dmaven.test.skip=true
+                    '''
+                   }
+				post {
+					failure {
+						sh '''
+						gray_SendMsg.sh ${BRANCH} ${serviceName} "服务构建失败，请开发人员检查" "构建失败通知"
+						'''
+					}
+			   }
+            }
+            
+            stage ('Make image'){
+                steps {
+                     sh '''
+                         gray_make_image.sh
+                         '''
+                }
+				post {
+					failure {
+						sh '''
+						gray_SendMsg.sh ${BRANCH} ${serviceName} "服务构建镜像失败，请运维人员检查" "构建镜像失败通知"
+						'''
+					}
+			   }
+            }
+			
+            stage ('Deploy'){
+			    steps {
+                     sh '''
+                         #env
+                         [[ -n $(eval echo '$'"$ENV""_""$serviceName"_Replics) ]] && paras=$(eval echo '$'"$ENV""_""$serviceName"_Replics) || paras="1 1"
+                         #gray_deploy.sh  ${paras}
+                         gray_deploy.sh  ${paras}
+                         '''
+					 }
+				post {
+					failure {
+						sh '''
+						gray_SendMsg.sh ${BRANCH} ${serviceName} "服务部署失败，请运维人员检查" "部署失败通知"
+						'''
+					}
+			   }
+            }
+
+            stage ('Check'){
+                steps {
+
+                     sh '''
+                         [[ -n $(eval echo '$'"$ENV""_""$serviceName"_Replics) ]] && paras=$(eval echo '$'"$ENV""_""$serviceName"_Replics) || paras="1 1"
+                         gray_check_health.sh   ${paras}
+                         '''
+                  }
+				post {
+				    success {
+					  	sh '''
+						gray_SendMsg.sh ${BRANCH} ${serviceName} "服务发布成功" "发布完成通知"
+						'''
+					}
+					failure {
+						sh '''
+						gray_SendMsg.sh ${BRANCH} ${serviceName} "服务发布失败，请相关开发人员检查" "发布失败通知"
+						'''
+					}
+			   }
+            }
+    }
+    
+    post {
+           always {
+                             cleanWs()
+                    }
+       }
+
+
+}

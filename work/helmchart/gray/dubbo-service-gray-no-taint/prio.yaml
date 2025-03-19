@@ -1,0 +1,26 @@
+apiVersion: scheduling.k8s.io/v1
+description: This priority class will not cause other pods to be preempted.
+kind: PriorityClass
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"scheduling.k8s.io/v1","description":"This priority class will not cause other pods to be preempted.","globalDefault":false,"kind":"PriorityClass","metadata":{"annotations":{},"name":"high-priority-nonpreempting"},"preemptionPolicy":"Never","value":1000000}
+  creationTimestamp: "2022-05-23T05:56:45Z"
+  generation: 1
+  managedFields:
+  - apiVersion: scheduling.k8s.io/v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:description: {}
+      f:metadata:
+        f:annotations:
+          .: {}
+          f:kubectl.kubernetes.io/last-applied-configuration: {}
+      f:preemptionPolicy: {}
+      f:value: {}
+    manager: kubectl-client-side-apply
+    operation: Update
+    time: "2022-05-23T05:56:45Z"
+  name: high-priority-nonpreempting
+preemptionPolicy: Never
+value: 1000000

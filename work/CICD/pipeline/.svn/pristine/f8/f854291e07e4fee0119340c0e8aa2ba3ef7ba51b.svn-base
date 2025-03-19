@@ -1,0 +1,73 @@
+pipeline {
+    agent any	
+    stages {
+	       stage('PreBuild') {
+				steps {
+				    script {
+                        def get_serviceName = sh(script: '''
+                                          echo $JOB_NAME |  awk -F '-' '{ print  $NF }'
+                                          ''' , returnStdout: true).trim()
+                        env.serviceName = get_serviceName
+                        env.ENV = "vip"
+                        env.CONTEXT = "vip"
+
+                     }
+                     
+					sh '''
+				    #SendMsg.sh ${BRANCH} ${serviceName} "服务开始发布了，请关注" "开始发布通知" $SVN_URL_2
+					#checkSvnStatus.sh
+				    '''
+				}
+		   }
+			
+            stage ('Deploy'){
+			    steps {
+                     sh '''
+                         #env
+                        [[ -n $(eval echo '$'"$ENV""_""$serviceName"_Replics) ]] && paras=$(eval echo '$'"$ENV""_""$serviceName"_Replics) || paras="2 2"
+                         vip_sync_updateDeploy.sh  ${paras}
+                         '''
+					 }
+				post {
+					failure {
+						sh '''
+                        echo "fail to deploy###################"
+						#SendMsg.sh ${BRANCH} ${serviceName} "服务部署失败，请运维人员检查" "部署失败通知"
+						'''
+					}
+			   }
+            }
+
+            stage ('Check'){
+                steps {
+
+                     sh '''
+                        [[ -n $(eval echo '$'"$ENV""_""$serviceName"_Replics) ]] && paras=$(eval echo '$'"$ENV""_""$serviceName"_Replics) || paras="2 2"
+                         vip_sync_check_update_health.sh   ${paras}
+                         '''
+                  }
+				post {
+				    success {
+					  	sh '''
+                        echo "pass check!!!!!!!!!!!!!!"
+						#SendMsg.sh ${BRANCH} ${serviceName} "服务发布成功" "发布完成通知"
+						'''
+					}
+					failure {
+						sh '''
+                        echo "fail to check!!!!!!!!!!!!!!"
+						#SendMsg.sh ${BRANCH} ${serviceName} "服务发布失败，请相关开发人员检查" "发布失败通知"
+						'''
+					}
+			   }
+            }
+    }
+    
+    post {
+           always {
+                             cleanWs()
+                    }
+       }
+
+
+}

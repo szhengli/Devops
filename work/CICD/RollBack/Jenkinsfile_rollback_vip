@@ -1,0 +1,46 @@
+pipeline {
+    agent any	
+    stages {
+	       stage('PreBuild') {
+				steps {
+				    script {
+                        def get_serviceName = sh(script: '''
+                                          echo $JOB_NAME | cut -d- -f3
+                                          ''' , returnStdout: true).trim()
+                        env.serviceName = get_serviceName
+                        def get_ENV = sh(script: '''
+                                          echo $JOB_NAME | cut -d- -f1
+                                          ''' , returnStdout: true).trim()
+                        env.ENV = get_ENV
+                        def get_CONTEXT = sh(script: '''
+                                          echo $JOB_NAME | cut -d- -f2
+                                          ''' , returnStdout: true).trim()
+                        env.CONTEXT = get_CONTEXT
+                     }
+				}
+		   }
+			
+            stage ('Rollback'){
+			    steps {
+                     sh '''
+                         env
+						 if [[ $ENV =~ vipv5 ]]; then
+                            [[ -n $(eval echo '$'"$ENV""_""$serviceName"_Replics) ]] && paras=$(eval echo '$'"$ENV""_""$serviceName"_Replics) || paras="1 1"
+                         fi
+                         rollback_to_k8s_vip.sh  ${paras}
+                         '''
+					 }
+            }
+
+            stage ('Check'){
+                steps {
+                     sh '''
+                         if [[ $ENV =~ vipv5 ]]; then
+                            [[ -n $(eval echo '$'"$ENV""_""$serviceName"_Replics) ]] && paras=$(eval echo '$'"$ENV""_""$serviceName"_Replics) || paras="1 1"
+                         fi
+                         rollback_check_health_vip.sh   ${paras}
+                         '''
+                  }
+            }
+    }
+}

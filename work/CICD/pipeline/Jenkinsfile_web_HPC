@@ -1,0 +1,55 @@
+pipeline {
+    agent  {
+	label "slave11"
+      }	
+    stages {
+	       stage('PreBuild') {
+				steps {
+				    script {
+                        def get_serviceName = sh(script: '''
+                                          echo $SVN_URL_2 |  awk -F '[/]+' '{ print  $NF }'
+                                          ''' , returnStdout: true).trim()
+                        env.serviceName = get_serviceName
+                        def get_WTYPE = sh(script: '''
+                                          echo $JOB_NAME | cut -d- -f3
+                                          ''' , returnStdout: true).trim()
+                        env.WTYPE = get_WTYPE
+						def get_ENV = sh(script: '''
+                                          echo $JOB_NAME | cut -d- -f2 |sed 's/v5//'
+                                          ''' , returnStdout: true).trim()
+                        env.ENV = get_ENV
+						def get_BRANCH = sh(script: '''
+                                        #  echo $SVN_URL_2 |  awk -F '[/]+' '{ print  $(NF-1) }'
+			[[ $SVN_URL_2 =~ "trunk" ]] && echo "trunk" || echo $SVN_URL_2 |  awk -F '[/]+' '{ print  $(NF-1) }'
+                                          ''' , returnStdout: true).trim()
+                        env.BRANCH = get_BRANCH
+                     }
+				}
+		   }
+           stage('Build') {
+                steps {
+                    sh '''
+                    id && pwd
+					[[ -n $(eval echo '$'"$serviceName"_alias) ]] && SubName=$(eval echo '$'"$serviceName"_alias)
+					sh /root/zui/shell/publish_test_build_jenkins.sh ${WTYPE} ${SubName}${ENV} ${ENV} ${BRANCH}
+                    '''
+                   }
+            }
+            
+			
+            stage ('Deploy'){
+			    steps {
+                     sh '''
+					    id && pwd
+						[[ -n $(eval echo '$'"$serviceName"_alias) ]] && SubName=$(eval echo '$'"$serviceName"_alias)
+                        if echo $JOB_NAME | grep -q gray ; then
+                            sh /root/zui/shell/publish_test_deploy_jenkins_gray.sh ${WTYPE} ${SubName}${ENV} ${ENV} ${BRANCH}
+                        else
+                            sh /root/zui/shell/publish_test_deploy_jenkins.sh ${WTYPE} ${SubName}${ENV} ${ENV} ${BRANCH}
+                        fi
+						changeJobDesc.py ${JOB_NAME} ${SVN_URL_2}
+                        '''
+					 }
+            }
+    }
+}

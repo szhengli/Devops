@@ -1,0 +1,35 @@
+#!/bin/bash
+set -e
+year=$1
+month=$2
+date=$3
+project=$4
+class=$5
+
+branch=${year}${month}${date}
+parent="http://svn.cnzhonglunnet.com/svn/zlnet/code/project"
+branch_path=${parent}/branch/${year}/${month}/${branch}
+auth=" --username svnadmin --password Zhonglun@2020"
+
+#源SVN路径
+source_path=${parent}/trunk/$class/$project
+#目的SVN路径
+des_path=${branch_path}/${project}
+
+if  svn list $auth  ${branch_path} &>/dev/null 
+then
+#     echo "exist"
+       #如果分支目录全部存在，指直接拉取新分支
+      svn copy $auth  $source_path $des_path -m "create a private $branch of $project" &>/dev/null  && \
+      echo -e "\n[zlnet:/code/project/branch/${year}/$month/$branch/$project]\n@zl-$project=rw" >> /data/svn/authz
+else
+#     echo "not exist"
+#判断2020/07/具体分支是否存在，否则新建,完成后并拉取分支
+       svn mkdir $auth  --parents   ${branch_path} -m "create branch" &>/dev/null 
+       svn copy $auth   $source_path $des_path -m "create a private $branch of $project" &>/dev/null  && \
+       echo -e "\n[zlnet:/code/project/branch/$year/$month/$branch/$project]\n@zl-$project=rw" >> /data/svn/authz
+fi
+
+echo   "svn分支: "$des_path" 创建成功"  
+
+

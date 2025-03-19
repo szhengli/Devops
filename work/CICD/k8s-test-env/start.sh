@@ -1,0 +1,7 @@
+#!/usr/bin/bash
+JVMS="-server -Xms2048m   -Xmx4096m -Xmn3072m -Xss512k -XX:MetaspaceSize=200m -XX:MaxMetaspaceSize=256m \
+-XX:+UseConcMarkSweepGC -XX:+UseParNewGC -XX:+CMSClassUnloadingEnabled -XX:+DisableExplicitGC \
+-XX:+UseCMSInitiatingOccupancyOnly -XX:CMSInitiatingOccupancyFraction=68 -verbose:gc -XX:+PrintGCDetails -XX:+PrintGCDateStamps \
+-Ddubbo.registry.file=/data/.dubbo/dubbo-registry-$(date +%Y%m%d-%H%M%S).cache \
+-Djava.awt.headless=true -Djava.net.preferIPv4Stack=true -Ddubbo.shutdown.hook=true"
+exec java  ${JVMS}  -jar $JAR

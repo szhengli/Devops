@@ -1,0 +1,86 @@
+pipeline {
+    agent any	
+    stages {
+	       stage('PreBuild') {
+				steps {
+				    script {
+                        def get_serviceName = sh(script: '''
+                                          echo $SVN_URL_2 |  awk -F '[/]+' '{ print  $NF }'
+                                          ''' , returnStdout: true).trim()
+                        env.serviceName = get_serviceName
+                        def get_ENV = sh(script: '''
+                                          echo $JOB_NAME | cut -d- -f1
+                                          ''' , returnStdout: true).trim()
+                        env.ENV = get_ENV
+						def get_MVNENV = sh(script: '''
+                                          echo $JOB_NAME | cut -d- -f1 |sed 's/v5//'
+                                          ''' , returnStdout: true).trim()
+                        env.MVNENV = get_MVNENV
+                        def get_CONTEXT = sh(script: '''
+                                          echo $JOB_NAME | cut -d- -f2
+                                          ''' , returnStdout: true).trim()
+                        env.CONTEXT = get_CONTEXT
+						def get_BRANCH = sh(script: '''
+                                          echo $SVN_URL_2 |  awk -F '[/]+' '{ print  $(NF-1) }'
+                                          ''' , returnStdout: true).trim()
+                        env.BRANCH = get_BRANCH
+                     }
+				}
+		   }
+           stage('Build') {
+                steps {
+                    sh '''
+                    id && pwd
+					ls -l
+					curl -s -d "kaenv=${MVNENV}&syscode=${serviceName}" http://fsit.cnzhonglunnet.com/zl.fp.fpv5.keyAccount.getAppConfig.customize.v5/1.0.0/action > ${serviceName}-pom/vars/vars.${MVNENV}.properties
+					mvn -f ${serviceName}-pom/pom.xml clean install package -P ${MVNENV} -Dmaven.test.skip=true
+                    '''
+                   }
+            }
+            
+            stage ('Make image'){
+                steps {
+                     sh '''
+                         #env
+                         make_image_test.sh
+                         '''
+                }
+            }
+			
+            stage ('Deploy'){
+			    steps {
+                     sh '''
+                         #env
+						 if [[ $ENV =~ prod|vipv5|prodv5 ]]; then
+                            [[ -n $(eval echo '$'"$ENV""_""$serviceName"_Replics) ]] && paras=$(eval echo '$'"$ENV""_""$serviceName"_Replics) || paras="2 2"
+                         else
+                            [[ -n $(eval echo '$'"$ENV""_""$serviceName"_Replics) ]] && paras=$(eval echo '$'"$ENV""_""$serviceName"_Replics) || paras="1 1"
+                         fi
+                         deploy_test.sh  ${paras}
+                         '''
+					 }
+            }
+
+            stage ('Check'){
+                steps {
+
+                     sh '''
+                         if [[ $ENV =~ prod|vipv5|prodv5 ]]; then
+                            [[ -n $(eval echo '$'"$ENV""_""$serviceName"_Replics) ]] && paras=$(eval echo '$'"$ENV""_""$serviceName"_Replics) || paras="2 2"
+                         else
+                            [[ -n $(eval echo '$'"$ENV""_""$serviceName"_Replics) ]] && paras=$(eval echo '$'"$ENV""_""$serviceName"_Replics) || paras="1 1"
+                         fi
+                         check_health_test.sh   ${paras}
+                         '''
+                  }
+            }
+    }
+    
+    post {
+           always {
+                             cleanWs()
+                    }
+       }
+
+
+}

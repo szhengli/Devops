@@ -1,0 +1,30 @@
+package main
+
+import (
+	"fmt"
+	"github.com/robfig/cron/v3"
+	"time"
+)
+
+type GreetingJob struct {
+	Name string
+}
+
+func (g GreetingJob) Run() {
+	fmt.Println("hello ", g.Name)
+}
+
+func main() {
+	c := cron.New()
+
+	id, _ := c.AddJob("@every 2s", GreetingJob{"james"})
+
+	c.Start()
+	time.Sleep(1 * time.Minute)
+
+	fmt.Println("remove the cronjob ++++++++++++++")
+	c.Remove(id)
+	fmt.Println("to quit the cron")
+	c.Stop()
+
+}

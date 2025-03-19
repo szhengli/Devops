@@ -1,0 +1,107 @@
+pipeline {
+    agent any	
+    stages {
+	       stage('PreBuild') {
+				steps {
+				    script {
+                        def get_serviceName = sh(script: '''
+                                          echo $SVN_URL_2 |  awk -F '[/]+' '{ print  $NF }'
+                                          ''' , returnStdout: true).trim()
+                        env.serviceName = get_serviceName
+                        def get_ENV = sh(script: '''
+                                          echo $JOB_NAME | cut -d- -f1
+                                          ''' , returnStdout: true).trim()
+                        env.ENV = "vip"
+                        env.MVNENV = "prod"
+                        env.CONTEXT = "vip"
+	        def get_BRANCH = sh(script: '''
+                                          echo $SVN_URL_2 |  awk -F '[/]+' '{ print  $(NF-1) }'
+                                          ''' , returnStdout: true).trim()
+                        env.BRANCH = get_BRANCH
+                     }
+					sh '''
+				                      vip_SendMsg.sh ${BRANCH} ${serviceName} "VIP服务开始发布了，请关注" "开始发布通知" $SVN_URL_2
+					# vip_checkSvnStatus.sh
+				                     '''
+				}
+		   }
+           stage('Build') {
+                steps {
+                    sh '''
+                    id && pwd
+                    mvn -f ${serviceName}-pom/pom.xml clean install package -P ${MVNENV} -Dmaven.test.skip=true
+                    '''
+                   }
+				post {
+					failure {
+						sh '''
+						vip_SendMsg.sh ${BRANCH} ${serviceName} "VIP服务构建失败，请开发人员检查" "构建失败通知"
+						'''
+					}
+			   }
+            }
+            
+            stage ('Make image'){
+                steps {
+                     sh '''
+                         vip_make_image.sh
+                         '''
+                }
+				post {
+					failure {
+						sh '''
+						vip_SendMsg.sh ${BRANCH} ${serviceName} "VIP服务构建镜像失败，请运维人员检查" "构建镜像失败通知"
+						'''
+					}
+			   }
+            }
+			
+            stage ('Deploy'){
+			    steps {
+                     sh '''
+                         #env
+                         [[ -n $(eval echo '$'"$ENV""_""$serviceName"_Replics) ]] && paras=$(eval echo '$'"$ENV""_""$serviceName"_Replics) || paras="2 2"
+                         #vip_deploy.sh  ${paras}
+                         vip_deploy.sh  ${paras}
+                         '''
+					 }
+				post {
+					failure {
+						sh '''
+						vip_SendMsg.sh ${BRANCH} ${serviceName} "VIP服务部署失败，请运维人员检查" "部署失败通知"
+						'''
+					}
+			   }
+            }
+
+            stage ('Check'){
+                steps {
+
+                     sh '''
+                         [[ -n $(eval echo '$'"$ENV""_""$serviceName"_Replics) ]] && paras=$(eval echo '$'"$ENV""_""$serviceName"_Replics) || paras="2 2"
+                         vip_check_health.sh   ${paras}
+                         '''
+                  }
+				post {
+				    success {
+					  	sh '''
+						vip_SendMsg.sh ${BRANCH} ${serviceName} "VIP服务发布成功" "发布完成通知"
+						'''
+					}
+					failure {
+						sh '''
+						vip_SendMsg.sh ${BRANCH} ${serviceName} "VIP服务发布失败，请相关开发人员检查" "发布失败通知"
+						'''
+					}
+			   }
+            }
+    }
+    
+    post {
+           always {
+                             cleanWs()
+                    }
+       }
+
+
+}

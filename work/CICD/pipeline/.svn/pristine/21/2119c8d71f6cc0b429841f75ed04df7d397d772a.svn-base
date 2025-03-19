@@ -1,0 +1,108 @@
+pipeline {
+    agent any
+    options {
+      ansiColor('xterm')
+    }
+    stages {
+           stage('Build') {
+                steps {
+                     script {
+                        def get_serviceName = sh(script: '''
+                                          echo $SVN_URL |  awk -F '[/]+' '{ print  $NF }'
+                                          ''' , returnStdout: true).trim()
+                        env.serviceName = get_serviceName
+                        def get_ENV = sh(script: '''
+                                          echo $JOB_NAME | cut -d- -f1
+                                          ''' , returnStdout: true).trim()
+                        env.ENV = get_ENV
+                        def get_MVNENV = sh(script: '''
+                                          echo $JOB_NAME | cut -d- -f1 | tr -d "v5"
+                                          ''' , returnStdout: true).trim()
+                        env.MVNENV = get_MVNENV
+                        def get_CONTEXT = sh(script: '''
+                                          echo $JOB_NAME | cut -d- -f2
+                                          ''' , returnStdout: true).trim()
+                        env.CONTEXT = get_CONTEXT
+						def get_BRANCH = sh(script: '''
+										  if echo $SVN_URL | grep "trunk" -q;then
+											  echo $SVN_URL |  awk -F '[/]+' '{ print  $(NF-2) }'
+										  else
+										      echo $SVN_URL |  awk -F '[/]+' '{ print  $(NF-1) }' 
+										  fi
+                                          ''' , returnStdout: true).trim()
+                        env.BRANCH = get_BRANCH
+						def get_jobName = sh(script: '''
+										  echo $JOB_NAME | cut -d- -f3
+										  ''' , returnStdout: true).trim()
+						env.jobName = get_jobName
+						
+						// 显示当前已构建使用分支
+						// currentBuild.rawBuild.project.description = '当前已构建使用分支: ' + get_BRANCH
+                     }
+
+                    sh '''
+					env
+                    id && pwd
+					if [[ $jobName == $serviceName ]];then
+						mvn -f ${serviceName}-pom/pom.xml package -P ${MVNENV} -Dmaven.test.skip=true
+					else
+					    echo "SVN分支路径有误,请按照对应环境填写对应的SVN路径!!!" && exit 1
+					fi
+                    '''
+                   }
+			    post {
+					failure {
+						sh '''
+						dingding.py ${JOB_NAME} ${serviceName} ${ENV} "服务构建失败"
+						'''
+					}
+			   }
+            }
+            
+            stage ('Make image'){
+                  steps {
+                     sh '''
+                         make_image.sh
+                         '''
+                  }
+            }
+			
+            stage ('Deploy'){
+			       steps {
+                     sh '''
+						 if [[ $ENV == pre ]]; then
+                            [[ -n $(eval echo '$'"$ENV""_""$serviceName"_Replics) ]] && paras=$(eval echo '$'"$ENV""_""$serviceName"_Replics) || paras="2 2"
+                         else
+                            [[ -n $(eval echo '$'"$ENV""_""$serviceName"_Replics) ]] && paras=$(eval echo '$'"$ENV""_""$serviceName"_Replics) || paras="1 1"
+                         fi
+                         deploy.sh  ${paras}
+                         '''
+					 }
+            }
+
+            stage ('Check'){
+                  steps {
+
+                    sh '''
+                         if [[ $ENV == pre ]]; then
+                            [[ -n $(eval echo '$'"$ENV""_""$serviceName"_Replics) ]] && paras=$(eval echo '$'"$ENV""_""$serviceName"_Replics) || paras="2 2"
+                         else
+                            [[ -n $(eval echo '$'"$ENV""_""$serviceName"_Replics) ]] && paras=$(eval echo '$'"$ENV""_""$serviceName"_Replics) || paras="1 1"
+                         fi
+                        check_health.sh   ${paras}
+                    '''
+					script{
+						// 显示当前运行的分支
+						currentBuild.rawBuild.project.description = '当前运行分支: ' + "${env.BRANCH}"
+					}
+                  }
+            }
+    }
+    
+    post {
+        always {
+            cleanWs()
+        }
+    }
+
+}

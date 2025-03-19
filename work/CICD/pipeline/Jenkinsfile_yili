@@ -1,0 +1,66 @@
+pipeline {
+    agent any	
+    stages {
+	       stage('PreBuild') {
+				steps {
+				    script {
+                        def get_serviceName = sh(script: '''
+                                          echo $SVN_URL_2 |  awk -F '[/]+' '{ print  $NF }'
+                                          ''' , returnStdout: true).trim()
+                        env.serviceName = get_serviceName
+                        def get_ENV = sh(script: '''
+                                          echo $JOB_NAME | cut -d- -f1-2
+                                          ''' , returnStdout: true).trim()
+                        env.ENV = get_ENV
+						def get_MVNENV = sh(script: '''
+                                          echo $JOB_NAME | cut -d- -f2
+                                          ''' , returnStdout: true).trim()
+                        env.MVNENV = get_MVNENV
+                     }
+				}
+		   }
+           stage('Build') {
+                steps {
+                    sh '''
+                    id && pwd
+					ls -l
+					mvn -f ${serviceName}-pom/pom.xml clean install package -P ${MVNENV} -Dmaven.test.skip=true
+                    '''
+                   }
+            }
+            
+            stage ('Make image'){
+                steps {
+                     sh '''
+                         #env
+                         make_image.sh
+                         '''
+                }
+            }
+			
+            stage ('Deploy'){
+			    steps {
+                     sh '''
+                        [[ -n $(eval echo '$'"$serviceName"_Replics) ]] && paras=$(eval echo '$'"$serviceName"_Replics) || paras="2 2"
+                        deploy.sh  ${paras}
+                        '''
+					 }
+            }
+
+            stage ('Check'){
+                steps {
+
+                     sh '''
+                        [[ -n $(eval echo '$'"$serviceName"_Replics) ]] && paras=$(eval echo '$'"$serviceName"_Replics) || paras="2 2"
+                        check_health.sh   ${paras}
+                         '''
+                  }
+            }
+    }
+    
+    post {
+           always {
+                             cleanWs()
+                    }
+       }
+}

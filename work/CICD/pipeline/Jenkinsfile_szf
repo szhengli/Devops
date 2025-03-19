@@ -1,0 +1,68 @@
+pipeline {
+    agent any
+    options {
+      ansiColor('xterm')
+    }
+    stages {
+           stage('Build') {
+                steps {
+                     script {
+                        def get_serviceName = sh(script: '''
+                                          echo $SVN_URL_2 |  awk -F '[/]+' '{ print  $NF }'
+                                          ''' , returnStdout: true).trim()
+                        env.serviceName = get_serviceName
+                        def get_ENV = sh(script: '''
+                                          echo $JOB_NAME | cut -d- -f1
+                                          ''' , returnStdout: true).trim()
+                        env.ENV = get_ENV
+                        def get_MVNENV = sh(script: '''
+                                          echo $JOB_NAME | cut -d- -f1 | tr -d "v5"
+                                          ''' , returnStdout: true).trim()
+                        env.MVNENV = get_MVNENV
+						def get_BRANCH = sh(script: '''
+										      echo $SVN_URL_2 |  awk -F '[/]+' '{ print  $(NF-1) }' 
+                                          ''' , returnStdout: true).trim()
+                        env.BRANCH = get_BRANCH
+                     }
+
+                    sh '''
+						mvn -f ${serviceName}-pom/pom.xml package -P ${MVNENV} -Dmaven.test.skip=true
+                    '''
+                   }
+            }
+            
+            stage ('Make image'){
+                  steps {
+                     sh '''
+                         make_image_ka.sh
+                         '''
+                  }
+            }
+			
+            stage ('Deploy'){
+			       steps {
+                     sh '''
+                         [[ -n $(eval echo '$'"$ENV""_""$serviceName"_Replics) ]] && paras=$(eval echo '$'"$ENV""_""$serviceName"_Replics) || paras="1 1"
+                         deploy_ka.sh  ${paras}
+                         '''
+					 }
+            }
+
+            stage ('Check'){
+                  steps {
+
+                    sh '''
+                        [[ -n $(eval echo '$'"$ENV""_""$serviceName"_Replics) ]] && paras=$(eval echo '$'"$ENV""_""$serviceName"_Replics) || paras="1 1"
+                        check_health_ka.sh   ${paras}
+                    '''
+                  }
+            }
+    }
+    
+    post {
+        always {
+            cleanWs()
+        }
+    }
+
+}
