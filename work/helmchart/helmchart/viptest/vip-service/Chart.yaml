@@ -1,0 +1,6 @@
+apiVersion: v2
+appVersion: 1.16.0
+description: to deploy zhonglun backend dubbo-service for  vip for test env
+name: vip-service
+type: application
+version: 0.1.0

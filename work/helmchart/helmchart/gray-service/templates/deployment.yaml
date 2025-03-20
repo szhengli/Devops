@@ -1,0 +1,199 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.name }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    routeTag: gray
+    version: {{ .Values.version | quote }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Values.name  }}
+  replicas: {{ .Values.replics }}   
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        timestamp: {{ now | quote }}
+      labels:
+        app: {{ .Values.name }}
+        routeTag: gray
+        version: {{ .Values.version | quote }}
+        service: {{ regexSplit "-" .Values.name -1|first }}
+        {{- if  has  .Values.name .Values.zone.front }} 
+        zone: front
+        {{- else if  has  .Values.name .Values.zone.back }}
+        zone: back
+        {{- else if  has  .Values.name .Values.zone.infra }}
+        zone: infra
+        {{- end  }}
+    spec:
+      terminationGracePeriodSeconds: 600
+      hostAliases:
+      - ip: "192.168.3.90"
+        hostnames:
+        - "w1"
+      - ip: "192.168.3.102"
+        hostnames:
+        - "w2"
+      - ip: "192.168.3.95"
+        hostnames:
+        - "w3"
+      - ip: "192.168.3.131"
+        hostnames:
+        - "w4"
+      - ip: "192.168.3.132"
+        hostnames:
+        - "w5"
+      - ip: "192.168.3.133"
+        hostnames:
+        - "w6"
+      - ip: "192.168.3.134"
+        hostnames:
+        - "w7"
+      - ip: "192.168.3.96"
+        hostnames:
+        - "w8"
+      - ip: "192.168.3.139"
+        hostnames:
+        - "w9"
+      - ip: "192.168.3.140"
+        hostnames:
+        - "w10"
+      - ip: "192.168.3.135"
+        hostnames:
+        - "w11"
+      - ip: "192.168.3.136"
+        hostnames:
+        - "w12"
+      - ip: "192.168.3.137"
+        hostnames:
+        - "w13"
+      - ip: "192.168.3.141"
+        hostnames:
+        - "w15"
+      - ip: "192.168.3.142"
+        hostnames:
+        - "w16"
+      - ip: "192.168.3.143"
+        hostnames:
+        - "w17"
+      - ip: "192.168.3.144"
+        hostnames:
+        - "w18"
+      - ip: "192.168.3.145"
+        hostnames:
+        - "w19"
+      - ip: "192.168.3.146"
+        hostnames:
+        - "w20"
+      - ip: "192.168.3.147"
+        hostnames:
+        - "w21"
+      - ip: "192.168.3.235"
+        hostnames:
+        - "ambari.hdp"
+      - ip: "192.168.3.236"
+        hostnames:
+        - "hadoop236.hdp"
+      - ip: "192.168.3.237"
+        hostnames:
+        - "hadoop237.hdp"
+      - ip: "192.168.3.238"
+        hostnames:
+        - "hadoop238.hdp"
+      - ip: "192.168.3.239"
+        hostnames:
+        - "hadoop239.hdp"
+      containers:
+      - name: {{ .Values.name }}
+        image: registry.cn-shanghai.aliyuncs.com/zhonglun/centos7-zl-gray:v0.3
+        volumeMounts:
+        - name: gclog
+          mountPath: /data/gclogs
+        - mountPath: /data/app-logs
+          name: app-logs
+        {{- if .Values.name | regexMatch "jobms-web|jobmsv5-web" }}
+        ports:
+        - name: jobms-9999
+          hostPort: 9999
+          containerPort: 9999
+        - name: jobms-8081
+          hostPort: 8081
+          containerPort: 8081
+        - name: jobms-8080
+          hostPort: 8080
+          containerPort: 8080
+        {{- end }}
+        env:
+        - name: JAVA_OPTS
+          {{- if .Values.name | regexMatch "dcms|basic-web|salems|urmsv5|omsv5" }}
+          value: -Xms4G -DrouteTag=gray -Xmx5G -Xmn2048m -Xss512k -XX:+DisableExplicitGC
+          {{- else if  .Values.name | regexMatch "stmsv5" }}     
+          value: -Xms4G -Xmx5G -DrouteTag=gray  -Xmn1536m -Xss512k -XX:MaxDirectMemorySize=1G
+          {{- else }}
+          value: -Xms1500m -DrouteTag=gray  -Xmx1500m -Xmn256m -Xss256k -XX:+DisableExplicitGC
+          {{- end }}
+        - name: ENV
+          value: {{ .Values.namespace }}
+        - name: slaveip
+          value: {{ .Values.slaveip }}
+        - name: jobname
+          value: {{ .Values.jobname }}
+        - name: servicename
+          value: {{ .Values.name }}
+        - name: aliyun_logs_test-zllog
+          value: /data/app-logs/*.hm.log.*
+        - name: aliyun_logs_test-zllog_project
+          value: test-app-logs-datas-zl
+        - name: aliyun_logs_test-zllog_logstore
+          value: zllog
+        - name: aliyun_logs_test-zllog_machinegroup
+          value: test-hm-group
+        {{- if .Values.name | regexMatch "dcms|basic-web|salems|stmsv5|urmsv5|omsv5" }}
+        resources:
+          requests:
+            cpu: "250m"
+            memory: "2Gi"
+          limits:
+            cpu: "8"
+            memory: "4Gi"
+        {{- else }}
+        resources:
+          requests:
+            cpu: "250m"
+            memory: "1Gi"
+          limits:
+            cpu: "8"
+            memory: "4Gi"
+        {{- end }}
+        readinessProbe:
+          exec:
+            command: ["readiness-new.sh"]
+          initialDelaySeconds: 30
+          periodSeconds: 5
+          successThreshold: 1
+          timeoutSeconds: 5
+          failureThreshold: 3
+        startupProbe:
+          exec:
+            command: ["startup-new.sh"]
+          initialDelaySeconds: 50
+          periodSeconds: 15
+          successThreshold: 1
+          failureThreshold: 100
+          timeoutSeconds: 15
+        lifecycle:
+          preStop:
+            exec:
+              command: ["/bin/sh","-c","sleep 5 && curl localhost:40000/offline && sleep 10"]
+      volumes:
+      - name: gclog
+        emptyDir: {}
+      - name: app-logs
+        emptyDir: {}
