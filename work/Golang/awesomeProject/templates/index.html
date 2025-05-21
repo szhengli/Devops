@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+    </style>
+    <meta charset="UTF-8">
+    <script src="https://apps.bdimg.com/libs/jquery/1.7.2/jquery.min.js"></script>
+    <title>Title</title>
+</head>
+<body>
+    <h1>
+                     生产发布回滚申请，请慎重选择！
+    </h1>
+
+
+    <p> 请选择需要回滚的发布单（或同步单的钉钉审批单编号）  </p>
+
+    <form>
+      <label for="dingIDSelect">审批单号选择:</label>
+
+      <select  id="dingIDSelect"  name="dingID"  onchange="check()">
+         <option value="">Select Option</option>
+      </select>
+      <br><br>
+
+        <div id="releaseDetails">
+            <label> 分支号：  </label>
+            <div id="branch">
+            </div>
+              <br>
+            <label> 系统清单：  </label>
+            <ui id="serviceList">
+            </ui>
+
+        </div>
+
+        <br>
+    </form>
+
+    <button id="rollback" value="提交回滚申请" onclick="rollback()"> 确认回滚 </button>
+
+    <br>
+    <br>
+    <div id="report">
+    </div>
+
+    <script>
+
+    function sleep(time){
+        var timeStamp = new Date().getTime();
+        var endTime = timeStamp + time;
+        while(true){
+            if (new Date().getTime() > endTime){
+                return;
+            }
+        }
+    }
+
+    function rollback(){
+
+       dingID = $("#dingIDSelect").val()
+
+        $.get("/rollback/start", {dingID: dingID} , function(res) {
+            $("#report").empty()
+            $("#report").html(res)
+            console.log(res)
+           })
+
+        //sleep(300)
+        //i = 0
+        //while (i<80) {
+
+
+
+
+
+
+
+            //sleep(3000)
+        //}
+        console.log("can you see me??")
+    }
+
+
+    function check(){
+        const dingID = document.getElementById("dingIDSelect").value
+        if (dingID == "") {
+            $("#serviceList").empty()
+            $("#branch").empty()
+            return
+        }
+        $.get("/rollback/getReleaseDetails", {dingID: dingID} , function(res) {
+
+            $("#branch").html(res["branch"])
+
+            $("#serviceList").empty()
+
+            res["serviceList"].forEach(service => {
+                $("#serviceList").append('<li>' + service+ '</li>')
+            })
+
+
+            console.log(res)
+        })
+
+    }
+
+
+
+    // Function to fetch JSON data and populate select element
+function populateSelect() {
+  // URL of the JSON file or API endpoint
+  const url = '/rollback/getReleases'; // Replace with your JSON data source URL
+
+  // Fetch JSON data
+  fetch(url)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('网络响应异常！');
+      }
+      console.log("xxxxxxxxx")
+      return response.json();
+    })
+    .then(data => {
+      // Get select element
+
+      console.log(data)
+
+      const select = document.getElementById('dingIDSelect');
+
+      // Clear existing options
+      select.innerHTML = '';
+
+      // Add options from JSON data
+        FirstElement = document.createElement('option');
+        FirstElement.value = "";
+        FirstElement.textContent = "";
+        select.appendChild( FirstElement);
+
+        data = data.sort().reverse().slice(0,10)
+        data.forEach(option => {
+        const optionElement = document.createElement('option');
+        optionElement.value = option;
+        optionElement.textContent = option;
+        select.appendChild(optionElement);
+      });
+    })
+    .catch(error => {
+      console.error('There was a problem fetching the data:', error);
+    });
+}
+
+// Call the function to populate select element
+populateSelect();
+</script>
+
+</body>
+</html>

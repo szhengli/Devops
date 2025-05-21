@@ -1,0 +1,26 @@
+package main
+
+import (
+	"awesomeProject/utils2"
+	"fmt"
+)
+
+const (
+	JENKINS_PROD_USERNAME = "admin"
+	JENKINS_PROD_TOKEN    = "11bbd62e96c8390d2920a2d6bcd24696fb"
+)
+
+func main() {
+
+	service := "oms"
+	// RecordBranchInProd("20280312", "oms")
+
+	branch, err := utils2.GetBranchInProd(service)
+
+	if err != nil {
+		fmt.Println("there is no record for", service)
+	} else {
+		fmt.Println("find the branch ", branch, service)
+	}
+
+}

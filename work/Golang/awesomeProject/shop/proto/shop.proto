@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package shop;
+
+option go_package = "./proto;shop";
+
+service Shop {
+	rpc Buy(BuyRequest) returns (BuyResponse) {}
+
+}
+
+message BuyRequest {
+	string name = 1;
+}
+
+message BuyResponse {
+	string msg = 1;
+}
+
+
+// --------------------------- helloworld service  -----------------------
+service Helloworld {
+	rpc Call(Request) returns (Response) {}
+	rpc Echo(Request) returns (Response) {}
+}
+
+message Request {
+	string name = 1;
+}
+
+message Response {
+	string msg = 1;
+}
+
